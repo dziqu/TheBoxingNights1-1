@@ -1,30 +1,37 @@
 package pl.theboxingnights.app.settings;
 
+import com.jme3.app.SimpleApplication;
 import com.jme3.system.AppSettings;
+
+import java.util.prefs.BackingStoreException;
 
 /**
  * Created by filip / 07.06.15 / 10:19
  */
 public class Settings {
 
+    private final SimpleApplication application;
     private final AppSettings appSettings;
     private String title            = "The Boxing Nights";
     private boolean fullscreen      = false;
     private int depthBits           = 16;
-    private int stencilBits         = 8;
+    private int stencilBits         = 0;
     private int bitsPerPixel        = 32;
     private String audioRenderer    = AppSettings.LWJGL_OPENAL;
     private int frameRate           = 60;
     private int frequency           = 60;
     private int height              = 768;
     private int width               = 1024;
-    private String renderer         = AppSettings.LWJGL_OPENGL2;
+    private String renderer         = AppSettings.LWJGL_OPENGL1;
     private int samples             = 4;
     private boolean vSync           = true;
+    private boolean showSettings    = true;
+    private String appSettingsName  = "pl.theboxingnights.settings";
 
 
-    public Settings() {
+    public Settings(SimpleApplication application) {
         appSettings = new AppSettings(true);
+        this.application = application;
     }
 
     public void getAll() {
@@ -61,6 +68,26 @@ public class Settings {
         getAppSettings().setRenderer(getRenderer());
         getAppSettings().setSamples(getSamples());
         getAppSettings().setVSync(isvSync());
+        application.setShowSettings(showSettings);
+        application.setSettings(appSettings);
+    }
+
+    public void save() {
+        try {
+            appSettings.save(appSettingsName);
+        }
+        catch (BackingStoreException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void load() {
+        try {
+            appSettings.load(appSettingsName);
+        }
+        catch (BackingStoreException e) {
+            e.printStackTrace();
+        }
     }
 
     public AppSettings getAppSettings() {
