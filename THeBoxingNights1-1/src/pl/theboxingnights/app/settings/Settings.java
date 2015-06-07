@@ -1,5 +1,6 @@
 package pl.theboxingnights.app.settings;
 
+import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.system.AppSettings;
 
@@ -10,9 +11,8 @@ import java.util.prefs.BackingStoreException;
  */
 public class Settings {
 
-    private final SimpleApplication application;
-    private final AppSettings appSettings;
-    private String title            = "The Boxing Nights";
+    private SimpleApplication application;
+    private AppSettings appSettings;
     private boolean fullscreen      = false;
     private int depthBits           = 16;
     private int stencilBits         = 0;
@@ -25,18 +25,15 @@ public class Settings {
     private String renderer         = AppSettings.LWJGL_OPENGL1;
     private int samples             = 4;
     private boolean vSync           = true;
-    private boolean showSettings    = true;
-    private String appSettingsName  = "pl.theboxingnights.settings";
 
 
-    public Settings(SimpleApplication application) {
-        appSettings = new AppSettings(true);
-        this.application = application;
+    public Settings(Application application) {
+        setAppSettings(new AppSettings(true));
+        this.setApplication((SimpleApplication) application);
     }
 
     public void getAll() {
         try {
-            setTitle(getAppSettings().getTitle());
             setFullscreen(getAppSettings().isFullscreen());
             setDepthBits(getAppSettings().getDepthBits());
             setStencilBits(getAppSettings().getStencilBits());
@@ -68,13 +65,13 @@ public class Settings {
         getAppSettings().setRenderer(getRenderer());
         getAppSettings().setSamples(getSamples());
         getAppSettings().setVSync(isvSync());
-        application.setShowSettings(showSettings);
-        application.setSettings(appSettings);
+        getApplication().setShowSettings(isShowSettings());
+        getApplication().setSettings(getAppSettings());
     }
 
     public void save() {
         try {
-            appSettings.save(appSettingsName);
+            getAppSettings().save(getAppSettingsName());
         }
         catch (BackingStoreException e) {
             e.printStackTrace();
@@ -83,7 +80,7 @@ public class Settings {
 
     public void load() {
         try {
-            appSettings.load(appSettingsName);
+            getAppSettings().load(getAppSettingsName());
         }
         catch (BackingStoreException e) {
             e.printStackTrace();
@@ -92,14 +89,6 @@ public class Settings {
 
     public AppSettings getAppSettings() {
         return appSettings;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public boolean isFullscreen() {
@@ -196,5 +185,29 @@ public class Settings {
 
     public void setvSync(boolean vSync) {
         this.vSync = vSync;
+    }
+
+    public SimpleApplication getApplication() {
+        return application;
+    }
+
+    public boolean isShowSettings() {
+        return true;
+    }
+
+    public String getAppSettingsName() {
+        return "pl.theboxingnights.settings";
+    }
+
+    public void setApplication(SimpleApplication application) {
+        this.application = application;
+    }
+
+    public void setAppSettings(AppSettings appSettings) {
+        this.appSettings = appSettings;
+    }
+
+    public String getTitle() {
+        return "The Boxing Nights";
     }
 }
