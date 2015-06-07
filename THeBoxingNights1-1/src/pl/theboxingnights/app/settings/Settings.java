@@ -13,6 +13,7 @@ public final class Settings {
 
     private SimpleApplication application;
     private AppSettings appSettings;
+    private GraphicsEnvironment graphicsEnvironment;
     private boolean fullscreen      = false;
     private int depthBits           = 16;
     private int stencilBits         = 0;
@@ -30,6 +31,12 @@ public final class Settings {
     public Settings(Application application) {
         setAppSettings(new AppSettings(true));
         this.setApplication((SimpleApplication) application);
+        setGraphicsEnvironment(new GraphicsEnvironment());
+        setHeight(getGraphicsEnvironment().getMaxHeight());
+        setWidth(getGraphicsEnvironment().getMaxWidth());
+        setFrameRate(getGraphicsEnvironment().getMaxRefreshRate());
+        setDepthBits(getGraphicsEnvironment().getMaxBitDepth());
+        setAll();
     }
 
     public void getAll() {
@@ -66,7 +73,9 @@ public final class Settings {
         getAppSettings().setSamples(getSamples());
         getAppSettings().setVSync(isvSync());
         getApplication().setShowSettings(isShowSettings());
+
         getApplication().setSettings(getAppSettings());
+
     }
 
     public void save() {
@@ -196,7 +205,7 @@ public final class Settings {
     }
 
     public String getAppSettingsName() {
-        return "pl.theboxingnights.settings";
+        return "pl.theboxingnights.gameSettings";
     }
 
     public void setApplication(SimpleApplication application) {
@@ -209,5 +218,13 @@ public final class Settings {
 
     public String getTitle() {
         return "The Boxing Nights";
+    }
+
+    public GraphicsEnvironment getGraphicsEnvironment() {
+        return graphicsEnvironment;
+    }
+
+    public void setGraphicsEnvironment(GraphicsEnvironment graphicsEnvironment) {
+        this.graphicsEnvironment = graphicsEnvironment;
     }
 }
