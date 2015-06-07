@@ -9,7 +9,7 @@ import java.util.prefs.BackingStoreException;
 /**
  * Created by filip / 07.06.15 / 10:19
  */
-public class Settings {
+public final class Settings {
 
     private SimpleApplication application;
     private AppSettings appSettings;
