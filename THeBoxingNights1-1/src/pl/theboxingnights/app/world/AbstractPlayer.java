@@ -1,10 +1,14 @@
 package pl.theboxingnights.app.world;
 
+import com.jme3.animation.AnimChannel;
+import com.jme3.animation.AnimControl;
+import com.jme3.animation.Bone;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.Vector3f;
@@ -26,6 +30,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private float scale;
     private BetterCharacterControl betterCharacterControl;
     private GhostControl ghostControl;
+    private Node headNode;
 
     public AbstractPlayer(SimpleApplication app, String name, String location) {
         setName(name);
@@ -35,16 +40,56 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         stateManager = this.app.getStateManager();
         rootNode = this.app.getRootNode();
         load();
+        addGhostControl();
+        addAnimControl();
     }
 
     private void load() {
         playerNode = (Node) assetManager.loadModel(location);
-//        betterCharacterControl = new BetterCharacterControl(1f, 4f, 1f);
-//        playerNode.addControl(betterCharacterControl);
-//        stateManager.getState(BulletAppState.class).getPhysicsSpace().add(betterCharacterControl);
+        playerNode.setLocalTranslation(new Vector3f(0, 1, 0));
+        betterCharacterControl = new BetterCharacterControl(0.5f, 4f, 1f);
+        playerNode.addControl(betterCharacterControl);
+        stateManager.getState(BulletAppState.class).getPhysicsSpace().add(betterCharacterControl);
         rootNode.attachChild(playerNode);
     }
 
+    private void addAnimControl() {
+        Node nodeA = (Node) playerNode.getChild("Armature");
+        int numberOfMeshes = nodeA.getChildren().size();
+        Node cubeAnim = null;
+        AnimControl animControl = null;
+        AnimChannel animChannel = null;
+        // TODO: petla obslugujaca wszystkie obiekty w obiekcie Armature
+        for (int i = 0; i < numberOfMeshes; i++) {
+            String name = nodeA.getChildren().get(i).getName();
+            cubeAnim = (Node) playerNode.getChild(name);
+            animControl = cubeAnim.getControl(AnimControl.class);
+            animChannel = animControl.createChannel();
+            animChannel.setAnim("anim1");
+        }
+    }
+
+    private void addGhostControl() {
+        Node nodeA = (Node) playerNode.getChild("Armature");
+        Node cube0 = (Node) playerNode.getChild("Cube.002");
+        GhostControl control = new GhostControl(new BoxCollisionShape(new Vector3f(0.2f,0.2f,0.2f)));
+        cube0.addControl(control);
+        stateManager.getState(BulletAppState.class).getPhysicsSpace().add(control);
+//        Node nodeA = (Node) playerNode.getChild("Armature");
+//        int numberOfMeshes = nodeA.getChildren().size();
+//        Node cubeAnim = null;
+//        AnimControl animControl = null;
+//        AnimChannel animChannel = null;
+//        // TODO: petla obslugujaca wszystkie obiekty w obiekcie Armature
+//        for (int i = 0; i < numberOfMeshes; i++) {
+//            String name = nodeA.getChildren().get(i).getName();
+//            cubeAnim = (Node) playerNode.getChild(name);
+//            Vector3f vector = cubeAnim.getWorldScale();
+//            GhostControl control = new GhostControl(new BoxCollisionShape(vector));
+//            cubeAnim.addControl(control);
+//            stateManager.getState(BulletAppState.class).getPhysicsSpace().add(control);
+//        }
+    }
 
     public SimpleApplication getApp() {
         return app;
