@@ -20,8 +20,4 @@ public interface WorldObject {
 
     public void setScale(float scale);
 
-    public RigidBodyControl getRigidBodyControl();
-
-    public void setRigidBodyControl(RigidBodyControl rigidBodyControl);
-
 }
