@@ -1,6 +1,7 @@
 package pl.theboxingnights.app.world;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
@@ -11,7 +12,7 @@ import com.jme3.scene.Node;
 /**
  * Created by filip / 08.06.15 / 03:45
  */
-public abstract class AbstractPlayer implements WorldObject {
+public abstract class AbstractPlayer extends AbstractAppState implements WorldObject {
 
     private SimpleApplication app;
     private AppStateManager stateManager;

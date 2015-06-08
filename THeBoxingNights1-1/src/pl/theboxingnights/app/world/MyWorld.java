@@ -6,6 +6,8 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.scene.Node;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
 
 /**
@@ -19,6 +21,12 @@ public class MyWorld extends AbstractAppState {
     private AssetManager assetManager;
     private WorldObject scene;
     private AbstractPlayer userPlayer;
+    private BulletAppState bulletAppState;
+    private Node rootNode;
+
+    public MyWorld() {
+
+    }
 
     @Override
     public void initialize (AppStateManager stateManager, Application app) {
@@ -26,13 +34,24 @@ public class MyWorld extends AbstractAppState {
         this.app = (SimpleApplication) app;
         this.stateManager = stateManager;
         assetManager = this.app.getAssetManager();
-        stateManager.attach(new BulletAppState());
-        stateManager.getState(BulletAppState.class).setDebugEnabled(true);
+        bulletAppState = new BulletAppState();
+        stateManager.attach(bulletAppState);
+        rootNode = this.app.getRootNode();
+//        stateManager.getState(BulletAppState.class).setDebugEnabled(true);
         ((SimpleApplication) app).getFlyByCamera().setMoveSpeed(60f);
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
-        scene = new Scene(this.app, "ring", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend");
-        userPlayer = new UserPlayer(this.app, "player1", "pl/theboxingnights/app/assets/models/player/greenPlayer.blend");
-        userPlayer.setScale(0.03f);
+//        scene = new Scene(this.app, "ring", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend");
+//        userPlayer = new UserPlayer(this.app, "player1", "pl/theboxingnights/app/assets/models/player/greenTestPlayer.blend");
+//        userPlayer.setScale(0.03f);
+        loadScene();
+    }
+
+    public void loadScene() {
+        Node ring = (Node) assetManager.loadModel("pl/theboxingnights/app/assets/models/scene/ring/ring.blend");
+        RigidBodyControl ringControl = new RigidBodyControl(0f);
+        ring.addControl(ringControl);
+        bulletAppState.getPhysicsSpace().add(ringControl);
+        rootNode.attachChild(ring);
     }
 
     public BulletAppState getBulletAppState() {

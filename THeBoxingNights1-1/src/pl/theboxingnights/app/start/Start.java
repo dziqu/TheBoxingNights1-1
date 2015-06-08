@@ -1,6 +1,7 @@
 package pl.theboxingnights.app.start;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.system.AppSettings;
 import pl.theboxingnights.app.settings.Settings;
 import pl.theboxingnights.app.world.MyWorld;
 
@@ -22,6 +23,10 @@ public class Start extends SimpleApplication {
         Settings settings = new Settings(this);
         settings.load();
         settings.getAll();
+        settings.setRenderer(AppSettings.LWJGL_OPENGL2);
+        settings.setFrequency(60);
+        settings.setFrameRate(60);
+        settings.setvSync(false);
         settings.setAll();
         settings.save();
     }

@@ -16,7 +16,7 @@ public final class Settings {
     private GraphicsEnvironment graphicsEnvironment;
     private boolean fullscreen      = false;
     private int depthBits           = 16;
-    private int stencilBits         = 0;
+    private int stencilBits         = 8;
     private int bitsPerPixel        = 32;
     private String audioRenderer    = AppSettings.LWJGL_OPENAL;
     private int frameRate           = 60;
