@@ -3,6 +3,7 @@ package pl.theboxingnights.app.world;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
@@ -14,6 +15,8 @@ import com.jme3.scene.Node;
  */
 public abstract class AbstractPlayer extends AbstractAppState implements WorldObject {
 
+    private final AssetManager assetManager;
+    private final Node rootNode;
     private SimpleApplication app;
     private AppStateManager stateManager;
     private Node playerNode;
@@ -28,15 +31,18 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         setName(name);
         setLocation(location);
         setApp(app);
+        assetManager = this.app.getAssetManager();
+        stateManager = this.app.getStateManager();
+        rootNode = this.app.getRootNode();
         load();
     }
 
     private void load() {
-        setPlayerNode((Node) app.getAssetManager().loadModel(location));
-        betterCharacterControl = new BetterCharacterControl(1f, 4f, 1f);
-        getPlayerNode().addControl(betterCharacterControl);
-        app.getStateManager().getState(BulletAppState.class).getPhysicsSpace().add(betterCharacterControl);
-        app.getRootNode().attachChild(getPlayerNode());
+        playerNode = (Node) assetManager.loadModel(location);
+//        betterCharacterControl = new BetterCharacterControl(1f, 4f, 1f);
+//        playerNode.addControl(betterCharacterControl);
+//        stateManager.getState(BulletAppState.class).getPhysicsSpace().add(betterCharacterControl);
+        rootNode.attachChild(playerNode);
     }
 
 

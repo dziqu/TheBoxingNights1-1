@@ -10,24 +10,17 @@ import pl.theboxingnights.app.world.MyWorld;
  */
 public class Start extends SimpleApplication {
 
-    public Start() {
-        setSettings();
-    }
-
     public static void main (String [] args) {
         Start app = new Start();
         app.start();
+        app.setSettings();
     }
 
     private void setSettings() {
         Settings settings = new Settings(this);
         settings.load();
-        settings.getAll();
-        settings.setRenderer(AppSettings.LWJGL_OPENGL2);
-        settings.setFrequency(60);
-        settings.setFrameRate(60);
-        settings.setvSync(false);
-        settings.setAll();
+        settings.getSettingsFromFile();
+        settings.setAllSettings();
         settings.save();
     }
 

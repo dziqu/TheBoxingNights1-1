@@ -3,6 +3,7 @@ package pl.theboxingnights.app.settings;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.system.AppSettings;
+import pl.theboxingnights.app.start.Start;
 
 import java.util.prefs.BackingStoreException;
 
@@ -11,93 +12,84 @@ import java.util.prefs.BackingStoreException;
  */
 public final class Settings {
 
-    private SimpleApplication application;
-    private AppSettings appSettings;
+    private Start app;
+    private AppSettings settings;
     private GraphicsEnvironment graphicsEnvironment;
-    private boolean fullscreen      = false;
-    private int depthBits           = 16;
-    private int stencilBits         = 8;
-    private int bitsPerPixel        = 32;
-    private String audioRenderer    = AppSettings.LWJGL_OPENAL;
-    private int frameRate           = 60;
-    private int frequency           = 60;
-    private int height              = 768;
-    private int width               = 1024;
-    private String renderer         = AppSettings.LWJGL_OPENGL1;
-    private int samples             = 4;
-    private boolean vSync           = true;
+    private boolean fullscreen;
+    private int depthBits;
+    private int stencilBits;
+    private int bitsPerPixel;
+    private String audioRenderer;
+    private int frameRate;
+    private int frequency;
+    private int height;
+    private int width;
+    private String renderer;
+    private int samples;
+    private boolean vSync;
 
 
-    public Settings(Application application) {
-        setAppSettings(new AppSettings(true));
-        this.setApplication((SimpleApplication) application);
-        setGraphicsEnvironment(new GraphicsEnvironment());
-        setHeight(getGraphicsEnvironment().getMaxHeight());
-        setWidth(getGraphicsEnvironment().getMaxWidth());
-        setFrameRate(getGraphicsEnvironment().getMaxRefreshRate());
-        setDepthBits(getGraphicsEnvironment().getMaxBitDepth());
-        setAll();
-    }
-
-    public void getAll() {
-        try {
-            setFullscreen(getAppSettings().isFullscreen());
-            setDepthBits(getAppSettings().getDepthBits());
-            setStencilBits(getAppSettings().getStencilBits());
-            setBitsPerPixel(getAppSettings().getBitsPerPixel());
-            setAudioRenderer(getAppSettings().getAudioRenderer());
-            setFrameRate(getAppSettings().getFrameRate());
-            setFrequency(getAppSettings().getFrequency());
-            setHeight(getAppSettings().getHeight());
-            setWidth(getAppSettings().getWidth());
-            setRenderer(getAppSettings().getRenderer());
-            setSamples(getAppSettings().getSamples());
-            setvSync(getAppSettings().isVSync());
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
+    public Settings(Start app) {
+        this.app = app;
+        if (settings == null) {
+            settings = new AppSettings(true);
         }
     }
 
-    public void setAll() {
-        getAppSettings().setTitle(getTitle());
-        getAppSettings().setFullscreen(isFullscreen());
-        getAppSettings().setDepthBits(getDepthBits());
-        getAppSettings().setStencilBits(getStencilBits());
-        getAppSettings().setBitsPerPixel(getBitsPerPixel());
-        getAppSettings().setAudioRenderer(getAudioRenderer());
-        getAppSettings().setFrameRate(getFrameRate());
-        getAppSettings().setFrequency(getFrequency());
-        getAppSettings().setHeight(getHeight());
-        getAppSettings().setWidth(getWidth());
-        getAppSettings().setRenderer(getRenderer());
-        getAppSettings().setSamples(getSamples());
-        getAppSettings().setVSync(isvSync());
-        getApplication().setShowSettings(isShowSettings());
-
-        getApplication().setSettings(getAppSettings());
-
+    public void getSettingsFromFile() {
+        fullscreen = settings.isFullscreen();
+        depthBits = settings.getDepthBits();
+        stencilBits = settings.getStencilBits();
+        bitsPerPixel = settings.getBitsPerPixel();
+        audioRenderer = settings.getAudioRenderer();
+        frameRate = settings.getFrameRate();
+        frequency = settings.getFrequency();
+        height = settings.getHeight();
+        width = settings.getWidth();
+        renderer = settings.getRenderer();
+        samples = settings.getSamples();
+        vSync = settings.isVSync();
     }
 
-    public void save() {
-        try {
-            getAppSettings().save(getAppSettingsName());
-        }
-        catch (BackingStoreException e) {
-            e.printStackTrace();
-        }
+    public void setAllSettings() {
+        settings.setFullscreen(fullscreen);
+        settings.setDepthBits(depthBits);
+        settings.setStencilBits(stencilBits);
+        settings.setBitsPerPixel(bitsPerPixel);
+        settings.setAudioRenderer(audioRenderer);
+        settings.setFrameRate(frameRate);
+        settings.setFrequency(frequency);
+        settings.setHeight(height);
+        settings.setWidth(width);
+        settings.setRenderer(renderer);
+        settings.setSamples(samples);
+        settings.setVSync(vSync);
+        settings.setTitle(getTitle());
+        app.setSettings(settings);
     }
 
-    public void load() {
-        try {
-            getAppSettings().load(getAppSettingsName());
-        }
-        catch (BackingStoreException e) {
-            e.printStackTrace();
-        }
+    public Start getApp() {
+        return app;
     }
 
-    public AppSettings getAppSettings() {
-        return appSettings;
+    public void setApp(Start app) {
+        this.app = app;
+    }
+
+    public AppSettings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(AppSettings settings) {
+        this.settings = settings;
+    }
+
+    public GraphicsEnvironment getGraphicsEnvironment() {
+        return graphicsEnvironment;
+    }
+
+    public void setGraphicsEnvironment(GraphicsEnvironment graphicsEnvironment) {
+        this.graphicsEnvironment = graphicsEnvironment;
     }
 
     public boolean isFullscreen() {
@@ -196,35 +188,29 @@ public final class Settings {
         this.vSync = vSync;
     }
 
-    public SimpleApplication getApplication() {
-        return application;
-    }
-
-    public boolean isShowSettings() {
-        return true;
-    }
-
-    public String getAppSettingsName() {
-        return "pl.theboxingnights.gameSettings";
-    }
-
-    public void setApplication(SimpleApplication application) {
-        this.application = application;
-    }
-
-    public void setAppSettings(AppSettings appSettings) {
-        this.appSettings = appSettings;
-    }
-
     public String getTitle() {
         return "The Boxing Nights";
     }
 
-    public GraphicsEnvironment getGraphicsEnvironment() {
-        return graphicsEnvironment;
+    public String getSettingsPath() {
+        return "pl.theboxingnights.setting";
     }
 
-    public void setGraphicsEnvironment(GraphicsEnvironment graphicsEnvironment) {
-        this.graphicsEnvironment = graphicsEnvironment;
+    public void save() {
+        try {
+            settings.save(getSettingsPath());
+        }
+        catch (BackingStoreException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void load() {
+        try {
+            settings.load(getSettingsPath());
+        }
+        catch (BackingStoreException e) {
+            e.printStackTrace();
+        }
     }
 }
