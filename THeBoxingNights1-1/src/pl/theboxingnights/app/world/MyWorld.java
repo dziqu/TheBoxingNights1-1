@@ -18,6 +18,7 @@ public class MyWorld extends AbstractAppState {
     private AppStateManager stateManager;
     private AssetManager assetManager;
     private WorldObject scene;
+    private AbstractPlayer userPlayer;
 
     @Override
     public void initialize (AppStateManager stateManager, Application app) {
@@ -26,8 +27,12 @@ public class MyWorld extends AbstractAppState {
         this.stateManager = stateManager;
         assetManager = this.app.getAssetManager();
         stateManager.attach(new BulletAppState());
+        stateManager.getState(BulletAppState.class).setDebugEnabled(true);
+        ((SimpleApplication) app).getFlyByCamera().setMoveSpeed(60f);
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
         scene = new Scene(this.app, "ring", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend");
+        userPlayer = new UserPlayer(this.app, "player1", "pl/theboxingnights/app/assets/models/player/greenPlayer.blend");
+        userPlayer.setScale(0.03f);
     }
 
     public BulletAppState getBulletAppState() {
