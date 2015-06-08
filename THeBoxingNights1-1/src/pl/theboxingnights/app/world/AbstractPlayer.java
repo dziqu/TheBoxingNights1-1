@@ -11,7 +11,7 @@ import com.jme3.scene.Node;
 /**
  * Created by filip / 08.06.15 / 03:45
  */
-public abstract class AbstractPlayer implements PlayerWorldObject {
+public abstract class AbstractPlayer implements WorldObject {
 
     private SimpleApplication app;
     private AppStateManager stateManager;
