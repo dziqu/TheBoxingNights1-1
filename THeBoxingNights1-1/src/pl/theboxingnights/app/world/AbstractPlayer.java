@@ -7,21 +7,13 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
-import com.jme3.collision.Collidable;
-import com.jme3.collision.CollisionResults;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-import pl.theboxingnights.app.world.player.AbstractControl;
-import pl.theboxingnights.app.world.player.FirstControl;
+import pl.theboxingnights.app.world.player.*;
 
 /**
  * Created by filip / 08.06.15 / 03:45
@@ -44,6 +36,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private GhostControl ghostControl;
     private com.jme3.scene.Node headNode;
     private AbstractControl keyControl;
+    private AbstractKeyAction abstractKeyAction;
 
     public AbstractPlayer(SimpleApplication app, String name, String location) {
         setName(name);
@@ -62,11 +55,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         inputManager.setCursorVisible(false);
     }
 
-    @Override
-    public void update (float tpf) {
-
-    }
-
     private void load() {
         playerNode = (com.jme3.scene.Node) assetManager.loadModel(location);
         playerNode.setLocalTranslation(new Vector3f(0, 1, 0));
@@ -74,6 +62,18 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         playerNode.addControl(betterCharacterControl);
         stateManager.getState(BulletAppState.class).getPhysicsSpace().add(betterCharacterControl);
         rootNode.attachChild(playerNode);
+    }
+
+    @Override
+    public void update (float tpf) {
+        setKeysActions();
+    }
+
+    private void setKeysActions() {
+        abstractKeyAction = null;
+        if (keyControl.isUpKey()) abstractKeyAction = new Up(this);
+        else abstractKeyAction = new Position(this);
+        abstractKeyAction.make();
     }
 
     private void initAnimations() {

@@ -17,16 +17,17 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     private final SimpleApplication app;
 
     private final String leftKeyName            = "left";
-    private final  String rightKeyName          = "right";
-    private final  String upKeyName             = "up";
-    private final  String downKeyName           = "down";
-    private final  String leftJabKeyName        = "leftJab";
-    private final  String rightJabKeyName       = "rightJab";
-    private final  String leftHookKeyName       = "leftHook";
-    private final  String rightHookKeyName      = "rightHook";
-    private final  String leftUppercutKeyName   = "leftUppercut";
-    private final  String rightUppercutKeyName  = "rightUppercut";
-    private final  String guardKeyName          = "guard";
+    private final String rightKeyName           = "right";
+    private final String upKeyName              = "up";
+    private final String downKeyName            = "down";
+    private final String leftJabKeyName         = "leftJab";
+    private final String rightJabKeyName        = "rightJab";
+    private final String leftHookKeyName        = "leftHook";
+    private final String rightHookKeyName       = "rightHook";
+    private final String leftUppercutKeyName    = "leftUppercut";
+    private final String rightUppercutKeyName   = "rightUppercut";
+    private final String guardKeyName           = "guard";
+    private final String positionKeyName        = "position";
 
     private int leftKeyValue            = 0;
     private int rightKeyValue           = 0;
@@ -39,6 +40,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     private int leftUppercutKeyValue    = 0;
     private int rightUppercutKeyValue   = 0;
     private int guardKeyValue           = 0;
+    private int positionKeyValue        = 0;
 
     private boolean isLeftKey           = false;
     private boolean isRightKey          = false;
@@ -51,6 +53,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     private boolean isLeftUppercutKey   = false;
     private boolean isRightUppercutKey  = false;
     private boolean isGuardKey          = false;
+    private boolean isPositionKey       = false;
 
     private Vector3f goDown             = new Vector3f(4, 0, 0);
     private Vector3f goLeft             = new Vector3f(0, 0, 4);
@@ -140,7 +143,10 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
             }case guardKeyName: {
                 isGuardKey(value);
                 break;
-            }default: {
+            }case positionKeyName: {
+                isPositionKey(value);
+                break;
+            } default: {
                 isLeftKey(value);
                 isRightKey(value);
                 isUpKey(value);
@@ -152,6 +158,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
                 isLeftUppercutKey(value);
                 isRightUppercutKey(value);
                 isGuardKey(value);
+                isPositionKey(value);
                 break;
             }
         }
@@ -309,7 +316,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     }
 
     public void isLeftKey(boolean isLeftKey) {
-        this.isLeftKey = isLeftKey;
+        this.setIsLeftKey(isLeftKey);
     }
 
     public boolean isRightKey() {
@@ -317,7 +324,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     }
 
     public void isRightKey(boolean isRightKey) {
-        this.isRightKey = isRightKey;
+        this.setIsRightKey(isRightKey);
     }
 
     public boolean isUpKey() {
@@ -325,7 +332,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     }
 
     public void isUpKey(boolean isUpKey) {
-        this.isUpKey = isUpKey;
+        this.setIsUpKey(isUpKey);
     }
 
     public boolean isDownKey() {
@@ -333,7 +340,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     }
 
     public void isDownKey(boolean isDownKey) {
-        this.isDownKey = isDownKey;
+        this.setIsDownKey(isDownKey);
     }
 
     public boolean isLeftJabKey() {
@@ -341,7 +348,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     }
 
     public void isLeftJabKey(boolean isLeftJabKey) {
-        this.isLeftJabKey = isLeftJabKey;
+        this.setIsLeftJabKey(isLeftJabKey);
     }
 
     public boolean isRightJabKey() {
@@ -349,7 +356,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     }
 
     public void isRightJabKey(boolean isRightJabKey) {
-        this.isRightJabKey = isRightJabKey;
+        this.setIsRightJabKey(isRightJabKey);
     }
 
     public boolean isLeftHookKey() {
@@ -357,7 +364,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     }
 
     public void isLeftHookKey(boolean isLeftHookKey) {
-        this.isLeftHookKey = isLeftHookKey;
+        this.setIsLeftHookKey(isLeftHookKey);
     }
 
     public boolean isRightHookKey() {
@@ -365,7 +372,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     }
 
     public void isRightHookKey(boolean isRightHookKey) {
-        this.isRightHookKey = isRightHookKey;
+        this.setIsRightHookKey(isRightHookKey);
     }
 
     public boolean isLeftUppercutKey() {
@@ -373,7 +380,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     }
 
     public void isLeftUppercutKey(boolean isLeftUppercutKey) {
-        this.isLeftUppercutKey = isLeftUppercutKey;
+        this.setIsLeftUppercutKey(isLeftUppercutKey);
     }
 
     public boolean isRightUppercutKey() {
@@ -381,7 +388,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     }
 
     public void isRightUppercutKey(boolean isRightUppercutKey) {
-        this.isRightUppercutKey = isRightUppercutKey;
+        this.setIsRightUppercutKey(isRightUppercutKey);
     }
 
     public boolean isGuardKey() {
@@ -389,7 +396,7 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     }
 
     public void isGuardKey(boolean isGuardKey) {
-        this.isGuardKey = isGuardKey;
+        this.setIsGuardKey(isGuardKey);
     }
 
     public Vector3f getGoDown() {
@@ -418,5 +425,73 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
 
     public SimpleApplication getApp() {
         return app;
+    }
+
+    public String getPositionKeyName() {
+        return positionKeyName;
+    }
+
+    public int getPositionKeyValue() {
+        return positionKeyValue;
+    }
+
+    public void setPositionKeyValue(int positionKeyValue) {
+        this.positionKeyValue = positionKeyValue;
+    }
+
+    public boolean isLeftKey() {
+        return isLeftKey;
+    }
+
+    public void setIsLeftKey(boolean isLeftKey) {
+        this.isLeftKey = isLeftKey;
+    }
+
+    public void setIsRightKey(boolean isRightKey) {
+        this.isRightKey = isRightKey;
+    }
+
+    public void setIsUpKey(boolean isUpKey) {
+        this.isUpKey = isUpKey;
+    }
+
+    public void setIsDownKey(boolean isDownKey) {
+        this.isDownKey = isDownKey;
+    }
+
+    public void setIsLeftJabKey(boolean isLeftJabKey) {
+        this.isLeftJabKey = isLeftJabKey;
+    }
+
+    public void setIsRightJabKey(boolean isRightJabKey) {
+        this.isRightJabKey = isRightJabKey;
+    }
+
+    public void setIsLeftHookKey(boolean isLeftHookKey) {
+        this.isLeftHookKey = isLeftHookKey;
+    }
+
+    public void setIsRightHookKey(boolean isRightHookKey) {
+        this.isRightHookKey = isRightHookKey;
+    }
+
+    public void setIsLeftUppercutKey(boolean isLeftUppercutKey) {
+        this.isLeftUppercutKey = isLeftUppercutKey;
+    }
+
+    public void setIsRightUppercutKey(boolean isRightUppercutKey) {
+        this.isRightUppercutKey = isRightUppercutKey;
+    }
+
+    public void setIsGuardKey(boolean isGuardKey) {
+        this.isGuardKey = isGuardKey;
+    }
+
+    public boolean isPositionKey() {
+        return isPositionKey;
+    }
+
+    public void isPositionKey(boolean isPositionKey) {
+        this.isPositionKey = isPositionKey;
     }
 }
