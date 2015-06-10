@@ -74,6 +74,9 @@ public class MyWorld extends AbstractAppState {
     public void update(float tpf) {
         player1.update(tpf);
         player2.update(tpf);
+
+        player1.lookAt(player2.getPlayerNode().getWorldTranslation());
+        player2.lookAt(player1.getPlayerNode().getWorldTranslation());
     }
 
     public BulletAppState getBulletAppState() {

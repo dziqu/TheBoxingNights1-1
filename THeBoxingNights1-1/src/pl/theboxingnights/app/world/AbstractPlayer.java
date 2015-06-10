@@ -60,7 +60,8 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private void loadPlayer() {
         setPlayerNode((Node) getAssetManager().loadModel(getLocation()));
         getPlayerNode().setLocalTranslation(new Vector3f(0, 1, 0));
-        setBetterCharacterControl(new BetterCharacterControl(0.5f, 1f, 1f));
+        setBetterCharacterControl(new BetterCharacterControl(1f, 2f, 1f));
+        getBetterCharacterControl().setGravity(new Vector3f(0, -10, 0));
         getPlayerNode().addControl(getBetterCharacterControl());
         getStateManager().getState(BulletAppState.class).getPhysicsSpace().add(getBetterCharacterControl());
         getRootNode().attachChild(getPlayerNode());
@@ -89,7 +90,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     }
 
     private void setKeysActions() {
-
         setKeyAction(null);
         if (getKeyControl().isUpKey()) {
             setKeyAction(new Up(this));
@@ -162,7 +162,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     @Override
     public Vector3f getLocationAtTheScene() {
-        return locationAtTheScene;
+        return getPlayerNode().getWorldTranslation();
     }
 
     @Override
@@ -200,8 +200,10 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         this.keyControl = keyControl;
     }
 
+//    TODO: naprawić problem z rotacjami
     public void lookAt(Vector3f direction) {
-        getPlayerNode().getControl(BetterCharacterControl.class).setViewDirection(direction);
+        Node bodyNode = (Node) getPlayerNode().getChild("Body");
+        bodyNode.lookAt(new Vector3f(direction), bodyNode.getWorldTranslation());
     }
 
     @Override
