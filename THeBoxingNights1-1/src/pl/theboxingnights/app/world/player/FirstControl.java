@@ -27,4 +27,9 @@ public class FirstControl extends AbstractControl {
         setGuardKeyValue        (KeyInput.KEY_SPACE);
         setPositionKeyValue     (KeyInput.KEY_X);
     }
+
+    @Override
+    public void initClassName() {
+        setClassName(FirstControl.class.getName());
+    }
 }

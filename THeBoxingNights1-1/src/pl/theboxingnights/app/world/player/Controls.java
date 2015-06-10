@@ -12,4 +12,8 @@ public interface Controls {
     public void initMapping();
 
     public void initActionListener();
+
+    public void initClassName();
+
+    public void initKeyNames();
 }

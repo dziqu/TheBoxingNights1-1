@@ -1,13 +1,9 @@
 package pl.theboxingnights.app.world.player;
 
-import com.jme3.animation.AnimChannel;
-import com.jme3.animation.AnimControl;
-import com.jme3.animation.AnimEventListener;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.math.Vector3f;
 
 /**
  * Created by filip / 10.06.15 / 11:03
@@ -15,19 +11,20 @@ import com.jme3.math.Vector3f;
 public abstract class AbstractControl implements Controls, ActionListener {
 
     private final SimpleApplication app;
+    private String className;
 
-    private final String leftKeyName            = "left";
-    private final String rightKeyName           = "right";
-    private final String upKeyName              = "up";
-    private final String downKeyName            = "down";
-    private final String leftJabKeyName         = "leftJab";
-    private final String rightJabKeyName        = "rightJab";
-    private final String leftHookKeyName        = "leftHook";
-    private final String rightHookKeyName       = "rightHook";
-    private final String leftUppercutKeyName    = "leftUppercut";
-    private final String rightUppercutKeyName   = "rightUppercut";
-    private final String guardKeyName           = "guard";
-    private final String positionKeyName        = "position";
+    private String leftKeyName            = null;
+    private String rightKeyName           = "right";
+    private String upKeyName              = "up";
+    private String downKeyName            = "down";
+    private String leftJabKeyName         = "leftJab";
+    private String rightJabKeyName        = "rightJab";
+    private String leftHookKeyName        = "leftHook";
+    private String rightHookKeyName       = "rightHook";
+    private String leftUppercutKeyName    = "leftUppercut";
+    private String rightUppercutKeyName   = "rightUppercut";
+    private String guardKeyName           = "guard";
+    private String positionKeyName        = "position";
 
     private int leftKeyValue            = 0;
     private int rightKeyValue           = 0;
@@ -57,9 +54,27 @@ public abstract class AbstractControl implements Controls, ActionListener {
 
     public AbstractControl(SimpleApplication app) {
         this.app = app;
+        initClassName();
+        initKeyNames();
         initKeysValues();
         initMapping();
         initActionListener();
+    }
+
+    @Override
+    public void initKeyNames() {
+        setLeftKeyName("leftKey" + getClassName());
+        setRightKeyName("rightKey" + getClassName());
+        setUpKeyName("upKey" + getClassName());
+        setDownKeyName("downKey" + getClassName());
+        setLeftJabKeyName("leftJabKey" + getClassName());
+        setRightJabKeyName("rightJabKey" + getClassName());
+        setLeftHookKeyName("leftHookKey" + getClassName());
+        setRightHookKeyName("rightHookKey" + getClassName());
+        setLeftUppercutKeyName("leftUppercutKey" + getClassName());
+        setRightUppercutKeyName("rightUppercut" + getClassName());
+        setGuardKeyName("guardKey" + getClassName());
+        setPositionKeyName("positionKey" + getClassName());
     }
 
     @Override
@@ -105,59 +120,105 @@ public abstract class AbstractControl implements Controls, ActionListener {
     }
 
     private void initBooleanKeys(String name, boolean value, float tpf) {
-        switch(name) {
-            case leftKeyName: {
-                isLeftKey(value);
-                break;
-            }case rightKeyName: {
-                isRightKey(value);
-                break;
-            }case upKeyName: {
-                isUpKey(value);
-                break;
-            }case downKeyName: {
-                isDownKey(value);
-                break;
-            }case leftJabKeyName: {
-                isLeftJabKey(value);
-                break;
-            }case rightJabKeyName: {
-                isRightJabKey(value);
-                break;
-            }case leftHookKeyName: {
-                isLeftHookKey(value);
-                break;
-            }case rightHookKeyName: {
-                isRightHookKey(value);
-                break;
-            }case leftUppercutKeyName: {
-                isLeftUppercutKey(value);
-                break;
-            }case rightUppercutKeyName: {
-                isRightUppercutKey(value);
-                break;
-            }case guardKeyName: {
-                isGuardKey(value);
-                break;
-            }case positionKeyName: {
-                isPositionKey(value);
-                break;
-            } default: {
-                isLeftKey(value);
-                isRightKey(value);
-                isUpKey(value);
-                isDownKey(value);
-                isLeftJabKey(value);
-                isRightJabKey(value);
-                isLeftHookKey(value);
-                isRightHookKey(value);
-                isLeftUppercutKey(value);
-                isRightUppercutKey(value);
-                isGuardKey(value);
-                isPositionKey(value);
-                break;
+        if (compare(name, getLeftKeyName()) == 0) {
+            if (value) {
+                isLeftKey(true);
+            } else {
+                isLeftKey(false);
             }
         }
+
+        if (compare(name, getRightKeyName()) == 0) {
+            if (value) {
+                isRightKey(true);
+            } else {
+                isRightKey(false);
+            }
+        }
+
+        if (compare(name, getUpKeyName()) == 0) {
+            if (value) {
+                isUpKey(true);
+            } else {
+                isUpKey(false);
+            }
+        }
+
+        if (compare(name, getDownKeyName()) == 0) {
+            if (value) {
+                isDownKey(true);
+            } else {
+                isDownKey(false);
+            }
+        }
+
+        if (compare(name, getLeftJabKeyName()) == 0) {
+            if (value) {
+                isLeftJabKey(true);
+            } else {
+                isLeftJabKey(false);
+            }
+        }
+
+        if (compare(name, getRightJabKeyName()) == 0) {
+            if (value) {
+                isRightJabKey(true);
+            } else {
+                isRightJabKey(false);
+            }
+        }
+
+        if (compare(name, getLeftHookKeyName()) == 0) {
+            if (value) {
+                isLeftHookKey(true);
+            } else {
+                isLeftHookKey(false);
+            }
+        }
+
+        if (compare(name, getRightHookKeyName()) == 0) {
+            if (value) {
+                isRightHookKey(true);
+            } else {
+                isRightHookKey(false);
+            }
+        }
+
+        if (compare(name, getLeftUppercutKeyName()) == 0) {
+            if (value) {
+                isLeftUppercutKey(true);
+            } else {
+                isLeftUppercutKey(false);
+            }
+        }
+
+        if (compare(name, getRightUppercutKeyName()) == 0) {
+            if (value) {
+                isRightUppercutKey(true);
+            } else {
+                isRightUppercutKey(false);
+            }
+        }
+
+        if (compare(name, getGuardKeyName()) == 0) {
+            if (value) {
+                isGuardKey(true);
+            } else {
+                isGuardKey(false);
+            }
+        }
+
+        if (compare(name, getPositionKeyName()) == 0) {
+            if (value) {
+                isPositionKey(true);
+            } else {
+                isPositionKey(false);
+            }
+        }
+    }
+
+    private int compare(String msg1, String msg2) {
+        return msg1.compareTo(msg2);
     }
 
     public SimpleApplication getSimpleApplication() {
@@ -454,6 +515,66 @@ public abstract class AbstractControl implements Controls, ActionListener {
     }
 
     public void isPositionKey(boolean isPositionKey) {
+        this.setIsPositionKey(isPositionKey);
+    }
+
+    public void setLeftKeyName(String leftKeyName) {
+        this.leftKeyName = leftKeyName;
+    }
+
+    public void setRightKeyName(String rightKeyName) {
+        this.rightKeyName = rightKeyName;
+    }
+
+    public void setUpKeyName(String upKeyName) {
+        this.upKeyName = upKeyName;
+    }
+
+    public void setDownKeyName(String downKeyName) {
+        this.downKeyName = downKeyName;
+    }
+
+    public void setLeftJabKeyName(String leftJabKeyName) {
+        this.leftJabKeyName = leftJabKeyName;
+    }
+
+    public void setRightJabKeyName(String rightJabKeyName) {
+        this.rightJabKeyName = rightJabKeyName;
+    }
+
+    public void setLeftHookKeyName(String leftHookKeyName) {
+        this.leftHookKeyName = leftHookKeyName;
+    }
+
+    public void setRightHookKeyName(String rightHookKeyName) {
+        this.rightHookKeyName = rightHookKeyName;
+    }
+
+    public void setLeftUppercutKeyName(String leftUppercutKeyName) {
+        this.leftUppercutKeyName = leftUppercutKeyName;
+    }
+
+    public void setRightUppercutKeyName(String rightUppercutKeyName) {
+        this.rightUppercutKeyName = rightUppercutKeyName;
+    }
+
+    public void setGuardKeyName(String guardKeyName) {
+        this.guardKeyName = guardKeyName;
+    }
+
+    public void setPositionKeyName(String positionKeyName) {
+        this.positionKeyName = positionKeyName;
+    }
+
+    public void setIsPositionKey(boolean isPositionKey) {
         this.isPositionKey = isPositionKey;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 }

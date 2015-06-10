@@ -11,4 +11,6 @@ public class UserPlayer extends AbstractPlayer {
     public UserPlayer(SimpleApplication app,String name, String location) {
         super(app, name, location);
     }
+
+
 }

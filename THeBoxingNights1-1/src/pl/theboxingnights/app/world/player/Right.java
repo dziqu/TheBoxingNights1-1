@@ -14,6 +14,6 @@ public class Right extends AbstractKeyAction {
 
     @Override
     public Vector3f getWalkDirection() {
-        return new Vector3f(0, 0, -4);
+        return new Vector3f(4, 0, 0);
     }
 }

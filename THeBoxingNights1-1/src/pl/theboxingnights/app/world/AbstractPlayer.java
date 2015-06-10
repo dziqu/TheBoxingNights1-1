@@ -12,6 +12,7 @@ import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -25,8 +26,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private final AssetManager assetManager;
     private final com.jme3.scene.Node rootNode;
     private final InputManager inputManager;
-    private final Camera cam;
-    private final FlyByCamera flyCam;
     private SimpleApplication app;
     private AppStateManager stateManager;
     private com.jme3.scene.Node playerNode;
@@ -50,41 +49,38 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         setName(name);
         setLocation(location);
         setApp(app);
-        assetManager = this.app.getAssetManager();
-        stateManager = this.app.getStateManager();
-        rootNode = this.app.getRootNode();
-        inputManager = this.app.getInputManager();
-        cam = this.app.getCamera();
-        flyCam = this.app.getFlyByCamera();
+        assetManager = this.getApp().getAssetManager();
+        setStateManager(this.getApp().getStateManager());
+        rootNode = this.getApp().getRootNode();
+        inputManager = this.getApp().getInputManager();
         loadPlayer();
         initAnimInstances();
     }
 
     private void loadPlayer() {
-        playerNode = (com.jme3.scene.Node) assetManager.loadModel(location);
-        playerNode.setLocalTranslation(new Vector3f(0, 1, 0));
-        betterCharacterControl = new BetterCharacterControl(0.5f, 1f, 1f);
-        playerNode.addControl(betterCharacterControl);
-        stateManager.getState(BulletAppState.class).getPhysicsSpace().add(betterCharacterControl);
-        rootNode.attachChild(playerNode);
+        setPlayerNode((Node) getAssetManager().loadModel(getLocation()));
+        getPlayerNode().setLocalTranslation(new Vector3f(0, 1, 0));
+        setBetterCharacterControl(new BetterCharacterControl(0.5f, 1f, 1f));
+        getPlayerNode().addControl(getBetterCharacterControl());
+        getStateManager().getState(BulletAppState.class).getPhysicsSpace().add(getBetterCharacterControl());
+        getRootNode().attachChild(getPlayerNode());
     }
 
     private void initAnimInstances() {
-        bodyNode = (Node) playerNode.getChild("Body");
-        headNode = (Node) playerNode.getChild("Head");
+        setBodyNode((Node) getPlayerNode().getChild("Body"));
+        setHeadNode((Node) getPlayerNode().getChild("Head"));
 
-        bodyAnimControl = bodyNode.getControl(AnimControl.class);
-        headAnimControl = headNode.getControl(AnimControl.class);
+        setBodyAnimControl(getBodyNode().getControl(AnimControl.class));
+        setHeadAnimControl(getHeadNode().getControl(AnimControl.class));
 
-        bodyAnimControl.addListener(this);
-        headAnimControl.addListener(this);
+        getBodyAnimControl().addListener(this);
+        getHeadAnimControl().addListener(this);
 
-        bodyAnimChannel = bodyAnimControl.createChannel();
-        headAnimChannel = headAnimControl.createChannel();
+        setBodyAnimChannel(getBodyAnimControl().createChannel());
+        setHeadAnimChannel(getHeadAnimControl().createChannel());
 
-        bodyAnimChannel.setAnim(animationName);
-        headAnimChannel.setAnim(animationName);
-
+        getBodyAnimChannel().setAnim(getAnimationName());
+        getHeadAnimChannel().setAnim(getAnimationName());
     }
 
     @Override
@@ -93,18 +89,27 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     }
 
     private void setKeysActions() {
-        keyAction = null;
-        if (keyControl.isUpKey()) {
-            keyAction = new Up(this);
-            this.animationName = "step";
+
+        setKeyAction(null);
+        if (getKeyControl().isUpKey()) {
+            setKeyAction(new Up(this));
+            setAnimationName(AnimationsNames.getStepAnimationName());
+        } else if (getKeyControl().isDownKey()) {
+            setKeyAction(new Down(this));
+            setAnimationName(AnimationsNames.getStepAnimationName());
+        } else if (getKeyControl().isLeftKey()) {
+            setKeyAction(new Left(this));
+            setAnimationName(AnimationsNames.getStepAnimationName());
+        } else if (getKeyControl().isRightKey()) {
+            setKeyAction(new Right(this));
+            setAnimationName(AnimationsNames.getStepAnimationName());
+        } else {
+            setKeyAction(new Position(this));
+            this.setAnimationName(AnimationsNames.getPositionAnimationName());
         }
-        else {
-            keyAction = new Position(this);
-            this.animationName = "position";
-        }
-        keyAction.make();
-        setAnimation(bodyAnimChannel, animationName);
-        setAnimation(headAnimChannel, animationName);
+        getKeyAction().make();
+        setAnimation(getBodyAnimChannel(), getAnimationName());
+        setAnimation(getHeadAnimChannel(), getAnimationName());
     }
 
     private void setAnimation(AnimChannel animationChannel, String animationName) {
@@ -207,5 +212,89 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     @Override
     public void onAnimChange(AnimControl animControl, AnimChannel animChannel, String s) {
 
+    }
+
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
+
+    public Node getRootNode() {
+        return rootNode;
+    }
+
+    public InputManager getInputManager() {
+        return inputManager;
+    }
+
+    public void setLocationAtTheScene(Vector3f locationAtTheScene) {
+        this.locationAtTheScene = locationAtTheScene;
+    }
+
+    public Node getHeadNode() {
+        return headNode;
+    }
+
+    public void setHeadNode(Node headNode) {
+        this.headNode = headNode;
+    }
+
+    public AbstractControl getKeyControl() {
+        return keyControl;
+    }
+
+    public AbstractKeyAction getKeyAction() {
+        return keyAction;
+    }
+
+    public void setKeyAction(AbstractKeyAction keyAction) {
+        this.keyAction = keyAction;
+    }
+
+    public Node getBodyNode() {
+        return bodyNode;
+    }
+
+    public void setBodyNode(Node bodyNode) {
+        this.bodyNode = bodyNode;
+    }
+
+    public AnimControl getBodyAnimControl() {
+        return bodyAnimControl;
+    }
+
+    public void setBodyAnimControl(AnimControl bodyAnimControl) {
+        this.bodyAnimControl = bodyAnimControl;
+    }
+
+    public AnimControl getHeadAnimControl() {
+        return headAnimControl;
+    }
+
+    public void setHeadAnimControl(AnimControl headAnimControl) {
+        this.headAnimControl = headAnimControl;
+    }
+
+    public AnimChannel getBodyAnimChannel() {
+        return bodyAnimChannel;
+    }
+
+    public void setBodyAnimChannel(AnimChannel bodyAnimChannel) {
+        this.bodyAnimChannel = bodyAnimChannel;
+    }
+
+    public AnimChannel getHeadAnimChannel() {
+        return headAnimChannel;
+    }
+
+    public void setHeadAnimChannel(AnimChannel headAnimChannel) {
+        this.headAnimChannel = headAnimChannel;
+    }
+
+    public String getAnimationName() {
+        return animationName;
+    }
+
+    public void setAnimationName(String animationName) {
+        this.animationName = animationName;
     }
 }
