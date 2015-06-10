@@ -13,4 +13,9 @@ public class SecondControl implements Controls {
     public void initMapping() {
 
     }
+
+    @Override
+    public void initActionListener() {
+
+    }
 }
