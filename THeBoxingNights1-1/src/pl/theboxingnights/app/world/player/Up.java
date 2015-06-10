@@ -13,7 +13,5 @@ public class Up extends AbstractKeyAction {
     }
 
     @Override
-    public Vector3f getWalkDirection() {
-        return new Vector3f(-4, 0, 0);
-    }
+    public Vector3f getWalkDirection() { return new Vector3f(-4, 0, 0); }
 }

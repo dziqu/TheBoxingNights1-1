@@ -12,7 +12,7 @@ import com.jme3.math.Vector3f;
 /**
  * Created by filip / 10.06.15 / 11:03
  */
-public abstract class AbstractControl implements Controls, ActionListener, AnimEventListener {
+public abstract class AbstractControl implements Controls, ActionListener {
 
     private final SimpleApplication app;
 
@@ -54,10 +54,6 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     private boolean isRightUppercutKey  = false;
     private boolean isGuardKey          = false;
     private boolean isPositionKey       = false;
-
-    private Vector3f goDown             = new Vector3f(4, 0, 0);
-    private Vector3f goLeft             = new Vector3f(0, 0, 4);
-    private Vector3f goRight            = new Vector3f(0, 0, -4);
 
     public AbstractControl(SimpleApplication app) {
         this.app = app;
@@ -162,16 +158,6 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
                 break;
             }
         }
-    }
-
-    @Override
-    public void onAnimCycleDone(AnimControl animControl, AnimChannel animChannel, String s) {
-
-    }
-
-    @Override
-    public void onAnimChange(AnimControl animControl, AnimChannel animChannel, String s) {
-
     }
 
     public SimpleApplication getSimpleApplication() {
@@ -397,30 +383,6 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
 
     public void isGuardKey(boolean isGuardKey) {
         this.setIsGuardKey(isGuardKey);
-    }
-
-    public Vector3f getGoDown() {
-        return goDown;
-    }
-
-    public void setGoDown(Vector3f goDown) {
-        this.goDown = goDown;
-    }
-
-    public Vector3f getGoLeft() {
-        return goLeft;
-    }
-
-    public void setGoLeft(Vector3f goLeft) {
-        this.goLeft = goLeft;
-    }
-
-    public Vector3f getGoRight() {
-        return goRight;
-    }
-
-    public void setGoRight(Vector3f goRight) {
-        this.goRight = goRight;
     }
 
     public SimpleApplication getApp() {

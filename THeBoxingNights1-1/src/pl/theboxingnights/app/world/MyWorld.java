@@ -41,8 +41,8 @@ public class MyWorld extends AbstractAppState {
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
         bulletAppState.setDebugEnabled(true);
-        flyCam.setMoveSpeed(100f);
-        flyCam.setEnabled(false);
+        flyCam.setMoveSpeed(50f);
+        flyCam.setEnabled(true);
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
         scene = new Scene(this.app, "ring", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend");
         player1 = new UserPlayer(this.app, "player1", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend");
