@@ -13,14 +13,6 @@ import pl.theboxingnights.app.world.AbstractPlayer;
 public abstract class AbstractKeyAction implements KeyAction {
 
     private AbstractPlayer player = null;
-    private Node playerNode;
-    private Node bodyNode;
-    private Node headNode;
-    private AnimControl bodyAnimControl;
-    private AnimControl headAnimControl;
-    private AnimChannel bodyAnimChannel;
-    private AnimChannel headAnimChannel;
-    private String animationName = "position";
 
     public AbstractKeyAction(AbstractPlayer player) {
         this.setPlayer(player);
@@ -38,69 +30,5 @@ public abstract class AbstractKeyAction implements KeyAction {
 
     public void setPlayer(AbstractPlayer player) {
         this.player = player;
-    }
-
-    public Node getPlayerNode() {
-        return playerNode;
-    }
-
-    public void setPlayerNode(Node playerNode) {
-        this.playerNode = playerNode;
-    }
-
-    public Node getBodyNode() {
-        return bodyNode;
-    }
-
-    public void setBodyNode(Node bodyNode) {
-        this.bodyNode = bodyNode;
-    }
-
-    public Node getHeadNode() {
-        return headNode;
-    }
-
-    public void setHeadNode(Node headNode) {
-        this.headNode = headNode;
-    }
-
-    public AnimControl getBodyAnimControl() {
-        return bodyAnimControl;
-    }
-
-    public void setBodyAnimControl(AnimControl bodyAnimControl) {
-        this.bodyAnimControl = bodyAnimControl;
-    }
-
-    public AnimControl getHeadAnimControl() {
-        return headAnimControl;
-    }
-
-    public void setHeadAnimControl(AnimControl headAnimControl) {
-        this.headAnimControl = headAnimControl;
-    }
-
-    public AnimChannel getBodyAnimChannel() {
-        return bodyAnimChannel;
-    }
-
-    public void setBodyAnimChannel(AnimChannel bodyAnimChannel) {
-        this.bodyAnimChannel = bodyAnimChannel;
-    }
-
-    public AnimChannel getHeadAnimChannel() {
-        return headAnimChannel;
-    }
-
-    public void setHeadAnimChannel(AnimChannel headAnimChannel) {
-        this.headAnimChannel = headAnimChannel;
-    }
-
-    public String getAnimationName() {
-        return animationName;
-    }
-
-    public void setAnimationName(String animationName) {
-        this.animationName = animationName;
     }
 }

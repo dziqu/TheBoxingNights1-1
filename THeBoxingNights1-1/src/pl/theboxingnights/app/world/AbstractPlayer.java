@@ -161,8 +161,8 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     }
 
     @Override
-    public void setLocationAtTheScene(Vector3f locationAtTheScene) {
-        this.locationAtTheScene = locationAtTheScene;
+    public void setLocalTranslation(Vector3f locationAtTheScene) {
+        getPlayerNode().getControl(BetterCharacterControl.class).warp(locationAtTheScene);
     }
 
     @Override
@@ -193,6 +193,10 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     public void setKeyControl(AbstractControl keyControl) {
         this.keyControl = keyControl;
+    }
+
+    public void lookAt(Vector3f direction) {
+        getPlayerNode().getControl(BetterCharacterControl.class).setViewDirection(direction);
     }
 
     @Override

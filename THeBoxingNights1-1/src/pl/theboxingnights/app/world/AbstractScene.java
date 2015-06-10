@@ -73,7 +73,7 @@ public abstract class AbstractScene extends AbstractAppState implements WorldObj
         return locationAtTheScene;
     }
 
-    public void setLocationAtTheScene(Vector3f locationAtTheScene) {
+    public void setLocalTranslation(Vector3f locationAtTheScene) {
         this.locationAtTheScene = locationAtTheScene;
     }
 

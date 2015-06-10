@@ -14,7 +14,7 @@ public interface WorldObject {
 
     public Vector3f getLocationAtTheScene();
 
-    public void setLocationAtTheScene(Vector3f locationAtTheScene);
+    public void setLocalTranslation(Vector3f locationAtTheScene);
 
     public float getScale();
 
