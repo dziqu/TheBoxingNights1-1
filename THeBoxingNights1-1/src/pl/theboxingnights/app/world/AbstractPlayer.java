@@ -10,8 +10,16 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
+import com.jme3.collision.Collidable;
+import com.jme3.collision.CollisionResults;
+import com.jme3.input.FlyByCamera;
+import com.jme3.input.InputManager;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 /**
  * Created by filip / 08.06.15 / 03:45
@@ -20,6 +28,9 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     private final AssetManager assetManager;
     private final Node rootNode;
+    private final InputManager inputManager;
+    private final Camera cam;
+    private final FlyByCamera flyCam;
     private SimpleApplication app;
     private AppStateManager stateManager;
     private Node playerNode;
@@ -38,35 +49,43 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         assetManager = this.app.getAssetManager();
         stateManager = this.app.getStateManager();
         rootNode = this.app.getRootNode();
+        inputManager = this.app.getInputManager();
+        cam = this.app.getCamera();
+        flyCam = this.app.getFlyByCamera();
         load();
-        initGhostControl();
         initAnimations();
+
+        flyCam.setEnabled(true);
+        inputManager.setCursorVisible(false);
+    }
+
+    @Override
+    public void update (float tpf) {
+
     }
 
     private void load() {
         playerNode = (Node) assetManager.loadModel(location);
         playerNode.setLocalTranslation(new Vector3f(0, 1, 0));
-        betterCharacterControl = new BetterCharacterControl(0.5f, 4f, 1f);
+        betterCharacterControl = new BetterCharacterControl(0.5f, 1f, 1f);
         playerNode.addControl(betterCharacterControl);
         stateManager.getState(BulletAppState.class).getPhysicsSpace().add(betterCharacterControl);
         rootNode.attachChild(playerNode);
     }
 
-    private void initGhostControl() {
-        Node stomachNode = (Node) playerNode.getChild("Brzuch");
-        System.out.println(stomachNode);
-        GhostControl ghost = new GhostControl(
-                new BoxCollisionShape(new Vector3f(2f, 2f, 2f)));
-        stomachNode.addControl(ghost);
-        stateManager.getState(BulletAppState.class).getPhysicsSpace().add(ghost);
+    private void initAnimations() {
+        String initAnimationName = "guard";
+        initGhostControlCubeAnimations("Body", initAnimationName);
+        initGhostControlCubeAnimations("Head", initAnimationName);
+
     }
 
-    private void initAnimations() {
-        Node animNode = (Node) playerNode.getChild("Body");
+    private void initGhostControlCubeAnimations(String childName, String animName ) {
+        Node animNode = (Node) playerNode.getChild(childName);
         AnimControl animControl = animNode.getControl(AnimControl.class);
-        System.out.println(animControl);
+        System.out.println(animControl.getAnimationNames());
         AnimChannel animChannel = animControl.createChannel();
-        animChannel.setAnim("pajacyk2");
+        animChannel.setAnim(animName);
     }
 
     public SimpleApplication getApp() {

@@ -42,8 +42,8 @@ public class MyWorld extends AbstractAppState {
         ((SimpleApplication) app).getFlyByCamera().setMoveSpeed(60f);
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
         scene = new Scene(this.app, "ring", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend");
-        userPlayer = new UserPlayer(this.app, "player1", "pl/theboxingnights/app/assets/models/player/greenPlayer.blend");
-        userPlayer.setScale(0.03f);
+        userPlayer = new UserPlayer(this.app, "player1", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend");
+        userPlayer.setScale(.4f);
     }
 
     public BulletAppState getBulletAppState() {
@@ -52,7 +52,7 @@ public class MyWorld extends AbstractAppState {
 
     @Override
     public void update(float tpf) {
-
+        userPlayer.update(tpf);
     }
 
 }
