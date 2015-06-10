@@ -4,7 +4,10 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
 import com.jme3.app.SimpleApplication;
+import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.InputListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Vector3f;
 
 /**
@@ -12,7 +15,7 @@ import com.jme3.math.Vector3f;
  */
 public abstract class AbstractControl implements Controls, ActionListener, AnimEventListener {
 
-    private SimpleApplication app;
+    private final SimpleApplication app;
 
     private String leftKeyName          = "left";
     private String rightKeyName         = "right";
@@ -26,17 +29,17 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     private String rightUppercutKeyName = "rightUppercut";
     private String guardKeyName         = "guard";
 
-    private int leftKey                 = 0;
-    private int rightKey                = 0;
-    private int upKey                   = 0;
-    private int downKey                 = 0;
-    private int leftJabKey              = 0;
-    private int rightJabKey             = 0;
-    private int leftHookKey             = 0;
-    private int rightHookKey            = 0;
-    private int leftUppercutKey         = 0;
-    private int rightUppercutKey        = 0;
-    private int guardKey                = 0;
+    private int leftKeyValue            = 0;
+    private int rightKeyValue           = 0;
+    private int upKeyValue              = 0;
+    private int downKeyValue            = 0;
+    private int leftJabKeyValue         = 0;
+    private int rightJabKeyValue        = 0;
+    private int leftHookKeyValue        = 0;
+    private int rightHookKeyValue       = 0;
+    private int leftUppercutKeyValue    = 0;
+    private int rightUppercutKeyValue   = 0;
+    private int guardKeyValue           = 0;
 
     private boolean isLeftKey           = false;
     private boolean isRightKey          = false;
@@ -57,12 +60,45 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     public AbstractControl(SimpleApplication app) {
         this.app = app;
         initKeysValues();
-
+        initMapping();
+        initActionListener();
     }
 
     @Override
     public void initMapping() {
+        addMapping(getLeftKeyName(), initNewKeyTrigger(getLeftKeyValue()));
+        addMapping(getRightKeyName(), initNewKeyTrigger(getRightKeyValue()));
+        addMapping(getUpKeyName(), initNewKeyTrigger(getUpKeyValue()));
+        addMapping(getDownKeyName(), initNewKeyTrigger(getDownKeyValue()));
+        addMapping(getLeftJabKeyName(), initNewKeyTrigger(getLeftJabKeyValue()));
+        addMapping(getRightJabKeyName(), initNewKeyTrigger(getRightJabKeyValue()));
+        addMapping(getLeftHookKeyName(), initNewKeyTrigger(getLeftHookKeyValue()));
+        addMapping(getRightHookKeyName(), initNewKeyTrigger(getRightHookKeyValue()));
+        addMapping(getLeftUppercutKeyName(), initNewKeyTrigger(getLeftUppercutKeyValue()));
+        addMapping(getRightUppercutKeyName(), initNewKeyTrigger(getRightUppercutKeyValue()));
+        addMapping(getGuardKeyName(), initNewKeyTrigger(getGuardKeyValue()));
+    }
 
+    private KeyTrigger initNewKeyTrigger(int value) {
+        return new KeyTrigger(value);
+    }
+
+    private void addMapping(String keyName, KeyTrigger keyTrigger) {
+        getInputManager().addMapping(keyName, keyTrigger);
+    }
+
+    @Override
+    public void initActionListener() {
+        addInputListener(getLeftKeyName(), getRightKeyName());
+        addInputListener(getUpKeyName(), getDownKeyName());
+        addInputListener(getLeftJabKeyName(), getRightJabKeyName());
+        addInputListener(getLeftHookKeyName(), getRightHookKeyName());
+        addInputListener(getLeftUppercutKeyName(), getRightUppercutKeyName());
+        addInputListener(getGuardKeyName());
+    }
+
+    private void addInputListener(String ... values) {
+        getInputManager().addListener(this, values);
     }
 
     @Override
@@ -78,6 +114,14 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
     @Override
     public void onAnimChange(AnimControl animControl, AnimChannel animChannel, String s) {
 
+    }
+
+    public SimpleApplication getSimpleApplication() {
+        return getApp();
+    }
+
+    public InputManager getInputManager() {
+        return getApp().getInputManager();
     }
 
     public String getLeftKeyName() {
@@ -168,92 +212,92 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
         this.guardKeyName = guardKeyName;
     }
 
-    public int getLeftKey() {
-        return leftKey;
+    public int getLeftKeyValue() {
+        return leftKeyValue;
     }
 
-    public void setLeftKey(int leftKey) {
-        this.leftKey = leftKey;
+    public void setLeftKeyValue(int leftKeyValue) {
+        this.leftKeyValue = leftKeyValue;
     }
 
-    public int getRightKey() {
-        return rightKey;
+    public int getRightKeyValue() {
+        return rightKeyValue;
     }
 
-    public void setRightKey(int rightKey) {
-        this.rightKey = rightKey;
+    public void setRightKeyValue(int rightKeyValue) {
+        this.rightKeyValue = rightKeyValue;
     }
 
-    public int getUpKey() {
-        return upKey;
+    public int getUpKeyValue() {
+        return upKeyValue;
     }
 
-    public void setUpKey(int upKey) {
-        this.upKey = upKey;
+    public void setUpKeyValue(int upKeyValue) {
+        this.upKeyValue = upKeyValue;
     }
 
-    public int getDownKey() {
-        return downKey;
+    public int getDownKeyValue() {
+        return downKeyValue;
     }
 
-    public void setDownKey(int downKey) {
-        this.downKey = downKey;
+    public void setDownKeyValue(int downKeyValue) {
+        this.downKeyValue = downKeyValue;
     }
 
-    public int getLeftJabKey() {
-        return leftJabKey;
+    public int getLeftJabKeyValue() {
+        return leftJabKeyValue;
     }
 
-    public void setLeftJabKey(int leftJabKey) {
-        this.leftJabKey = leftJabKey;
+    public void setLeftJabKeyValue(int leftJabKeyValue) {
+        this.leftJabKeyValue = leftJabKeyValue;
     }
 
-    public int getRightJabKey() {
-        return rightJabKey;
+    public int getRightJabKeyValue() {
+        return rightJabKeyValue;
     }
 
-    public void setRightJabKey(int rightJabKey) {
-        this.rightJabKey = rightJabKey;
+    public void setRightJabKeyValue(int rightJabKeyValue) {
+        this.rightJabKeyValue = rightJabKeyValue;
     }
 
-    public int getLeftHookKey() {
-        return leftHookKey;
+    public int getLeftHookKeyValue() {
+        return leftHookKeyValue;
     }
 
-    public void setLeftHookKey(int leftHookKey) {
-        this.leftHookKey = leftHookKey;
+    public void setLeftHookKeyValue(int leftHookKeyValue) {
+        this.leftHookKeyValue = leftHookKeyValue;
     }
 
-    public int getRightHookKey() {
-        return rightHookKey;
+    public int getRightHookKeyValue() {
+        return rightHookKeyValue;
     }
 
-    public void setRightHookKey(int rightHookKey) {
-        this.rightHookKey = rightHookKey;
+    public void setRightHookKeyValue(int rightHookKeyValue) {
+        this.rightHookKeyValue = rightHookKeyValue;
     }
 
-    public int getLeftUppercutKey() {
-        return leftUppercutKey;
+    public int getLeftUppercutKeyValue() {
+        return leftUppercutKeyValue;
     }
 
-    public void setLeftUppercutKey(int leftUppercutKey) {
-        this.leftUppercutKey = leftUppercutKey;
+    public void setLeftUppercutKeyValue(int leftUppercutKeyValue) {
+        this.leftUppercutKeyValue = leftUppercutKeyValue;
     }
 
-    public int getRightUppercutKey() {
-        return rightUppercutKey;
+    public int getRightUppercutKeyValue() {
+        return rightUppercutKeyValue;
     }
 
-    public void setRightUppercutKey(int rightUppercutKey) {
-        this.rightUppercutKey = rightUppercutKey;
+    public void setRightUppercutKeyValue(int rightUppercutKeyValue) {
+        this.rightUppercutKeyValue = rightUppercutKeyValue;
     }
 
-    public int getGuardKey() {
-        return guardKey;
+    public int getGuardKeyValue() {
+        return guardKeyValue;
     }
 
-    public void setGuardKey(int guardKey) {
-        this.guardKey = guardKey;
+    public void setGuardKeyValue(int guardKeyValue) {
+        this.guardKeyValue = guardKeyValue;
     }
 
     public boolean isLeftKey() {
@@ -366,5 +410,9 @@ public abstract class AbstractControl implements Controls, ActionListener, AnimE
 
     public void setGoRight(Vector3f goRight) {
         this.goRight = goRight;
+    }
+
+    public SimpleApplication getApp() {
+        return app;
     }
 }

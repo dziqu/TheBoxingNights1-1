@@ -10,4 +10,6 @@ public interface Controls {
     public void initKeysValues();
 
     public void initMapping();
+
+    public void initActionListener();
 }

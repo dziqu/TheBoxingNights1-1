@@ -14,16 +14,16 @@ public class FirstControl extends AbstractControl {
 
     @Override
     public void initKeysValues() {
-        setLeftKey(KeyInput.KEY_A);
-        setRightKey(KeyInput.KEY_D);
-        setUpKey(KeyInput.KEY_W);
-        setDownKey(KeyInput.KEY_S);
-        setLeftJabKey(KeyInput.KEY_Q);
-        setRightJabKey(KeyInput.KEY_E);
-        setLeftHookKey(KeyInput.KEY_Z);
-        setRightHookKey(KeyInput.KEY_C);
-        setLeftUppercutKey(KeyInput.KEY_R);
-        setRightUppercutKey(KeyInput.KEY_F);
-        setGuardKey(KeyInput.KEY_SPACE);
+        setLeftKeyValue(KeyInput.KEY_A);
+        setRightKeyValue(KeyInput.KEY_D);
+        setUpKeyValue(KeyInput.KEY_W);
+        setDownKeyValue(KeyInput.KEY_S);
+        setLeftJabKeyValue(KeyInput.KEY_Q);
+        setRightJabKeyValue(KeyInput.KEY_E);
+        setLeftHookKeyValue(KeyInput.KEY_Z);
+        setRightHookKeyValue(KeyInput.KEY_C);
+        setLeftUppercutKeyValue(KeyInput.KEY_R);
+        setRightUppercutKeyValue(KeyInput.KEY_F);
+        setGuardKeyValue(KeyInput.KEY_SPACE);
     }
 }

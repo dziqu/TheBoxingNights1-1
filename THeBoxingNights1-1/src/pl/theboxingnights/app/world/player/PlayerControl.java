@@ -28,7 +28,7 @@ public class PlayerControl {
 
     private void initControl() {
         if (controlNumber == 0)  {
-            playerControl = new FirstControl();
+            playerControl = new FirstControl(userPlayer.getApp());
         }
         else if (controlNumber == 1) {
             playerControl = new SecondControl();

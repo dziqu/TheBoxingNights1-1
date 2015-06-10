@@ -42,7 +42,7 @@ public class MyWorld extends AbstractAppState {
         scene = new Scene(this.app, "ring", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend");
         userPlayer = new UserPlayer(this.app, "player1", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend");
         userPlayer.setScale(.4f);
-        userPlayer.setKeyControl(new FirstControl());
+        userPlayer.setKeyControl(new FirstControl(this.app));
     }
 
     @Override

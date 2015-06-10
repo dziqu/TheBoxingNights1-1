@@ -6,19 +6,18 @@ import pl.theboxingnights.app.world.AbstractPlayer;
 /**
  * Created by filip / 10.06.15 / 11:08
  */
-public class Up implements Motion {
+public class Up implements Action {
 
-    private Vector3f motionVector = new Vector3f(-4, 0, 0);
     private Vector3f walkDirection = new Vector3f(-4, 0, 0);
     private AbstractPlayer player = null;
 
     public Up(AbstractPlayer player) {
-        this.player = player;
+        this.setPlayer(player);
     }
 
     @Override
     public void make() {
-        player.getBetterCharacterControl().setWalkDirection(walkDirection);
+        getPlayer().getBetterCharacterControl().setWalkDirection(getWalkDirection());
     }
 
     private void setWalkDirection(Vector3f walkDirection) {
@@ -30,6 +29,14 @@ public class Up implements Motion {
     }
 
     private void resetWalkDirection() {
-        walkDirection.set(0, 0, 0);
+        getWalkDirection().set(0, 0, 0);
+    }
+
+    public AbstractPlayer getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(AbstractPlayer player) {
+        this.player = player;
     }
 }
