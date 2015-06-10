@@ -6,10 +6,8 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
+import pl.theboxingnights.app.world.player.FirstControl;
 
 /**
  * Created by filip / 07.06.15 / 18:25
@@ -23,7 +21,7 @@ public class MyWorld extends AbstractAppState {
     private WorldObject scene;
     private AbstractPlayer userPlayer;
     private BulletAppState bulletAppState;
-    private Node rootNode;
+    private com.jme3.scene.Node rootNode;
 
     public MyWorld() {
 
@@ -44,15 +42,17 @@ public class MyWorld extends AbstractAppState {
         scene = new Scene(this.app, "ring", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend");
         userPlayer = new UserPlayer(this.app, "player1", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend");
         userPlayer.setScale(.4f);
-    }
-
-    public BulletAppState getBulletAppState() {
-        return stateManager.getState(BulletAppState.class);
+        userPlayer.setKeyControl(new FirstControl());
     }
 
     @Override
     public void update(float tpf) {
-        userPlayer.update(tpf);
+
+//        userPlayer.update(tpf);
+    }
+
+    public BulletAppState getBulletAppState() {
+        return stateManager.getState(BulletAppState.class);
     }
 
 }

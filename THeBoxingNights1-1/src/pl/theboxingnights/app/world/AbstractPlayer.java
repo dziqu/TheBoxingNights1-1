@@ -20,6 +20,8 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import pl.theboxingnights.app.world.player.AbstractControl;
+import pl.theboxingnights.app.world.player.FirstControl;
 
 /**
  * Created by filip / 08.06.15 / 03:45
@@ -27,20 +29,21 @@ import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 public abstract class AbstractPlayer extends AbstractAppState implements WorldObject {
 
     private final AssetManager assetManager;
-    private final Node rootNode;
+    private final com.jme3.scene.Node rootNode;
     private final InputManager inputManager;
     private final Camera cam;
     private final FlyByCamera flyCam;
     private SimpleApplication app;
     private AppStateManager stateManager;
-    private Node playerNode;
+    private com.jme3.scene.Node playerNode;
     private String name;
     private String location;
     private Vector3f locationAtTheScene;
     private float scale;
     private BetterCharacterControl betterCharacterControl;
     private GhostControl ghostControl;
-    private Node headNode;
+    private com.jme3.scene.Node headNode;
+    private AbstractControl keyControl;
 
     public AbstractPlayer(SimpleApplication app, String name, String location) {
         setName(name);
@@ -65,7 +68,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     }
 
     private void load() {
-        playerNode = (Node) assetManager.loadModel(location);
+        playerNode = (com.jme3.scene.Node) assetManager.loadModel(location);
         playerNode.setLocalTranslation(new Vector3f(0, 1, 0));
         betterCharacterControl = new BetterCharacterControl(0.5f, 1f, 1f);
         playerNode.addControl(betterCharacterControl);
@@ -74,14 +77,14 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     }
 
     private void initAnimations() {
-        String initAnimationName = "guard";
+        String initAnimationName = "step";
         initGhostControlCubeAnimations("Body", initAnimationName);
         initGhostControlCubeAnimations("Head", initAnimationName);
 
     }
 
     private void initGhostControlCubeAnimations(String childName, String animName ) {
-        Node animNode = (Node) playerNode.getChild(childName);
+        com.jme3.scene.Node animNode = (com.jme3.scene.Node) playerNode.getChild(childName);
         AnimControl animControl = animNode.getControl(AnimControl.class);
         System.out.println(animControl.getAnimationNames());
         AnimChannel animChannel = animControl.createChannel();
@@ -104,11 +107,11 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         this.stateManager = stateManager;
     }
 
-    public Node getPlayerNode() {
+    public com.jme3.scene.Node getPlayerNode() {
         return playerNode;
     }
 
-    public void setPlayerNode(Node playerNode) {
+    public void setPlayerNode(com.jme3.scene.Node playerNode) {
         this.playerNode = playerNode;
     }
 
@@ -164,5 +167,9 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     public void setGhostControl(GhostControl ghostControl) {
         this.ghostControl = ghostControl;
+    }
+
+    public void setKeyControl(AbstractControl keyControl) {
+        this.keyControl = keyControl;
     }
 }
