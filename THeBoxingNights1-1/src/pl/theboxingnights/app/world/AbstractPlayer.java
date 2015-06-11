@@ -8,26 +8,12 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
-import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
-import com.jme3.bullet.control.KinematicRagdollControl;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.collision.Collidable;
 import com.jme3.collision.CollisionResults;
-import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
-import com.jme3.texture.Texture;
 import pl.theboxingnights.app.world.player.*;
 
 /**
@@ -71,41 +57,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         initAnimInstances();
 
         new PlayerBuilder(this);
-
-//        SkeletonControl skeletonControl = getPlayerNode().getChild("Body").getControl(SkeletonControl.class);
-//
-//        Box cube1Mesh = new Box( .6f,.5f,1f);
-//        Geometry cube1Geo = new Geometry("My Textured Box", cube1Mesh);
-//        cube1Geo.setLocalTranslation(new Vector3f(cube1Geo.getLocalTranslation().getX(), cube1Geo.getLocalTranslation().getY(), cube1Geo.getLocalTranslation().getZ() - 2f));
-////        cube1Geo.scale(1f, 0f, 0f);
-//        cube1Geo.setName("cubeGeo");
-//        Material cube1Mat = new Material(assetManager,
-//                "Common/MatDefs/Misc/Unshaded.j3md");
-//        cube1Mat.setColor("Color", ColorRGBA.Red);
-//        cube1Geo.setMaterial(cube1Mat);
-//
-//        GhostControl ghost = new GhostControl(
-//                new BoxCollisionShape(new Vector3f(.3f, .2f, .5f)));
-//
-//        Node n = skeletonControl.getAttachmentsNode("Bone.003");
-//        n.attachChild(cube1Geo);
-//        cube1Geo.addControl(ghost);
-//        bulletAppState.getPhysicsSpace().add(ghost);
-//
-//        Geometry cube1Geo2 = new Geometry("My Textured Box", cube1Mesh);
-//        cube1Geo2.setName("cubeGeo2");
-//        Material cube1Mat2 = new Material(assetManager,
-//                "Common/MatDefs/Misc/Unshaded.j3md");
-//        cube1Mat2.setColor("Color", ColorRGBA.Red);
-//        cube1Geo2.setMaterial(cube1Mat2);
-//
-//        GhostControl ghost2 = new GhostControl(
-//                new BoxCollisionShape(new Vector3f(.5f,.5f,.5f)));
-//
-//        Node n2 = skeletonControl.getAttachmentsNode("Bone.006");
-//        n2.attachChild(cube1Geo2);
-//        cube1Geo2.addControl(ghost2);
-//        bulletAppState.getPhysicsSpace().add(ghost2);
     }
 
     private void loadPlayer() {
@@ -130,12 +81,12 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     @Override
     public void update (float tpf) {
-        setKeysActions();
+        setKeysActionsAndAnimations();
         lookAt(opponent.getPlayerNode().getWorldTranslation());
         checkCollisions();
     }
 
-    private void setKeysActions() {
+    private void setKeysActionsAndAnimations() {
         setKeyAction(null);
         if (getKeyControl().isUpKey()) {
             setKeyAction(new Up(this));
@@ -151,7 +102,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
             setAnimationName(AnimationsNames.getStepAnimationName());
         } else {
             setKeyAction(new Position(this));
-            this.setAnimationName(AnimationsNames.getPositionAnimationName());
+            setAnimationName(AnimationsNames.getPositionAnimationName());
         }
         getKeyAction().make();
         setAnimation(getBodyAnimChannel(), getAnimationName());
@@ -165,10 +116,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     private void checkCollisions() {
         CollisionResults results = new CollisionResults();
-//        Spatial n1 = playerNode.getChild("cubeGeo");
-//        Spatial n2 = opponent.getPlayerNode().getChild("cubeGeo2");
-//        n1.collideWith((Collidable) n2.getWorldBound(), results);
-//        System.out.println(results.size());
     }
 
     public SimpleApplication getApp() {
@@ -259,7 +206,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         float xDistance = playerNode.getWorldTranslation().getX() - opponent.getPlayerNode().getWorldTranslation().getX();
         float zDistance = playerNode.getWorldTranslation().getZ() - opponent.getPlayerNode().getWorldTranslation().getZ();
         float maxDifference = 6.0f;
-        float denominator = 1.75f;
+        float denominator = 1.8f;
         float difference = xDistance + zDistance;
         if (difference < 0) difference *= -1;
         difference = (float) Math.sqrt(difference);
@@ -280,11 +227,11 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     @Override
     public void prePhysicsTick(PhysicsSpace space, float tpf){
-        // apply state changes ...
+
     }
     @Override
     public void physicsTick(PhysicsSpace space, float tpf){
-        // poll game state ...
+
     }
 
     public AssetManager getAssetManager() {
