@@ -44,6 +44,9 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private AnimChannel bodyAnimChannel;
     private AnimChannel headAnimChannel;
     private String animationName = "position";
+    private AbstractPlayer opponent;
+    private double yDistance;
+    private float counter;
 
     public AbstractPlayer(SimpleApplication app, String name, String location) {
         setName(name);
@@ -60,7 +63,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private void loadPlayer() {
         setPlayerNode((Node) getAssetManager().loadModel(getLocation()));
         getPlayerNode().setLocalTranslation(new Vector3f(0, 1, 0));
-        setBetterCharacterControl(new BetterCharacterControl(1f, 2f, 1f));
+        setBetterCharacterControl(new BetterCharacterControl(1f, 4f, 1f));
         getBetterCharacterControl().setGravity(new Vector3f(0, -10, 0));
         getPlayerNode().addControl(getBetterCharacterControl());
         getStateManager().getState(BulletAppState.class).getPhysicsSpace().add(getBetterCharacterControl());
@@ -87,6 +90,8 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     @Override
     public void update (float tpf) {
         setKeysActions();
+        counter += tpf;
+        lookAt(opponent.getPlayerNode().getWorldTranslation());
     }
 
     private void setKeysActions() {
@@ -200,10 +205,18 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         this.keyControl = keyControl;
     }
 
-//    TODO: naprawić problem z rotacjami
     public void lookAt(Vector3f direction) {
-        Node bodyNode = (Node) getPlayerNode().getChild("Body");
-        bodyNode.lookAt(new Vector3f(direction), bodyNode.getWorldTranslation());
+        bodyNode = (Node) getPlayerNode().getChild("Body");
+
+        float xDistance = playerNode.getWorldTranslation().getX() - opponent.getPlayerNode().getWorldTranslation().getX();
+        float zDistance = playerNode.getWorldTranslation().getZ() - opponent.getPlayerNode().getWorldTranslation().getZ();
+        float maxDifference = 6.0f;
+        float denominator = 1.8f;
+        float difference = xDistance + zDistance;
+        if (difference < 0) difference *= -1;
+        difference = (float) Math.sqrt(difference);
+
+        bodyNode.lookAt(new Vector3f(direction.getX(), (maxDifference - difference) / denominator , direction.getZ()), Vector3f.UNIT_Y);
     }
 
     @Override
@@ -298,5 +311,9 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     public void setAnimationName(String animationName) {
         this.animationName = animationName;
+    }
+
+    public void setOpponent(AbstractPlayer opponent) {
+        this.opponent = opponent;
     }
 }
