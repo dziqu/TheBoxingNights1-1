@@ -12,12 +12,14 @@ import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
+import com.jme3.bullet.control.KinematicRagdollControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.collision.Collidable;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -46,14 +48,11 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private float scale;
     private BetterCharacterControl betterCharacterControl;
     private GhostControl ghostControl;
-    private com.jme3.scene.Node headNode;
     private AbstractControl keyControl;
     private AbstractKeyAction keyAction;
     private Node bodyNode;
     private AnimControl bodyAnimControl;
-    private AnimControl headAnimControl;
     private AnimChannel bodyAnimChannel;
-    private AnimChannel headAnimChannel;
     private String animationName = "position";
     private AbstractPlayer opponent;
     private double yDistance;
@@ -71,42 +70,42 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         loadPlayer();
         initAnimInstances();
 
-        SkeletonControl skeletonControl = getPlayerNode().getChild("Body").getControl(SkeletonControl.class);
+        new PlayerBuilder(this);
 
-        Box cube1Mesh = new Box( 1f,1f,1f);
-        Geometry cube1Geo = new Geometry("My Textured Box", cube1Mesh);
-        cube1Geo.setName("cubeGeo");
-        Material cube1Mat = new Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        Texture cube1Tex = assetManager.loadTexture(
-                "Interface/Logo/Monkey.jpg");
-        cube1Mat.setTexture("ColorMap", cube1Tex);
-        cube1Geo.setMaterial(cube1Mat);
-
-        GhostControl ghost = new GhostControl(
-                new BoxCollisionShape(new Vector3f(.5f,.5f,.5f)));
-
-        Node n = skeletonControl.getAttachmentsNode("Bone.003");
-        n.attachChild(cube1Geo);
-        cube1Geo.addControl(ghost);
-        bulletAppState.getPhysicsSpace().add(ghost);
-
-        Geometry cube1Geo2 = new Geometry("My Textured Box", cube1Mesh);
-        cube1Geo2.setName("cubeGeo2");
-        Material cube1Mat2 = new Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        Texture cube1Tex2 = assetManager.loadTexture(
-                "Interface/Logo/Monkey.jpg");
-        cube1Mat2.setTexture("ColorMap", cube1Tex2);
-        cube1Geo2.setMaterial(cube1Mat2);
-
-        GhostControl ghost2 = new GhostControl(
-                new BoxCollisionShape(new Vector3f(.5f,.5f,.5f)));
-
-        Node n2 = skeletonControl.getAttachmentsNode("Bone.006");
-        n2.attachChild(cube1Geo2);
-        cube1Geo2.addControl(ghost2);
-        bulletAppState.getPhysicsSpace().add(ghost2);
+//        SkeletonControl skeletonControl = getPlayerNode().getChild("Body").getControl(SkeletonControl.class);
+//
+//        Box cube1Mesh = new Box( .6f,.5f,1f);
+//        Geometry cube1Geo = new Geometry("My Textured Box", cube1Mesh);
+//        cube1Geo.setLocalTranslation(new Vector3f(cube1Geo.getLocalTranslation().getX(), cube1Geo.getLocalTranslation().getY(), cube1Geo.getLocalTranslation().getZ() - 2f));
+////        cube1Geo.scale(1f, 0f, 0f);
+//        cube1Geo.setName("cubeGeo");
+//        Material cube1Mat = new Material(assetManager,
+//                "Common/MatDefs/Misc/Unshaded.j3md");
+//        cube1Mat.setColor("Color", ColorRGBA.Red);
+//        cube1Geo.setMaterial(cube1Mat);
+//
+//        GhostControl ghost = new GhostControl(
+//                new BoxCollisionShape(new Vector3f(.3f, .2f, .5f)));
+//
+//        Node n = skeletonControl.getAttachmentsNode("Bone.003");
+//        n.attachChild(cube1Geo);
+//        cube1Geo.addControl(ghost);
+//        bulletAppState.getPhysicsSpace().add(ghost);
+//
+//        Geometry cube1Geo2 = new Geometry("My Textured Box", cube1Mesh);
+//        cube1Geo2.setName("cubeGeo2");
+//        Material cube1Mat2 = new Material(assetManager,
+//                "Common/MatDefs/Misc/Unshaded.j3md");
+//        cube1Mat2.setColor("Color", ColorRGBA.Red);
+//        cube1Geo2.setMaterial(cube1Mat2);
+//
+//        GhostControl ghost2 = new GhostControl(
+//                new BoxCollisionShape(new Vector3f(.5f,.5f,.5f)));
+//
+//        Node n2 = skeletonControl.getAttachmentsNode("Bone.006");
+//        n2.attachChild(cube1Geo2);
+//        cube1Geo2.addControl(ghost2);
+//        bulletAppState.getPhysicsSpace().add(ghost2);
     }
 
     private void loadPlayer() {
@@ -121,19 +120,12 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     private void initAnimInstances() {
         setBodyNode((Node) getPlayerNode().getChild("Body"));
-        setHeadNode((Node) getPlayerNode().getChild("Head"));
-
         setBodyAnimControl(getBodyNode().getControl(AnimControl.class));
-        setHeadAnimControl(getHeadNode().getControl(AnimControl.class));
 
         getBodyAnimControl().addListener(this);
-        getHeadAnimControl().addListener(this);
 
         setBodyAnimChannel(getBodyAnimControl().createChannel());
-        setHeadAnimChannel(getHeadAnimControl().createChannel());
-
         getBodyAnimChannel().setAnim(getAnimationName());
-        getHeadAnimChannel().setAnim(getAnimationName());
     }
 
     @Override
@@ -163,7 +155,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         }
         getKeyAction().make();
         setAnimation(getBodyAnimChannel(), getAnimationName());
-        setAnimation(getHeadAnimChannel(), getAnimationName());
     }
 
     private void setAnimation(AnimChannel animationChannel, String animationName) {
@@ -174,10 +165,10 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     private void checkCollisions() {
         CollisionResults results = new CollisionResults();
-        Spatial n1 = playerNode.getChild("cubeGeo");
-        Spatial n2 = opponent.getPlayerNode().getChild("cubeGeo2");
-        n1.collideWith((Collidable) n2.getWorldBound(), results);
-        System.out.println(results.size());
+//        Spatial n1 = playerNode.getChild("cubeGeo");
+//        Spatial n2 = opponent.getPlayerNode().getChild("cubeGeo2");
+//        n1.collideWith((Collidable) n2.getWorldBound(), results);
+//        System.out.println(results.size());
     }
 
     public SimpleApplication getApp() {
@@ -312,14 +303,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         this.locationAtTheScene = locationAtTheScene;
     }
 
-    public Node getHeadNode() {
-        return headNode;
-    }
-
-    public void setHeadNode(Node headNode) {
-        this.headNode = headNode;
-    }
-
     public AbstractControl getKeyControl() {
         return keyControl;
     }
@@ -348,28 +331,12 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         this.bodyAnimControl = bodyAnimControl;
     }
 
-    public AnimControl getHeadAnimControl() {
-        return headAnimControl;
-    }
-
-    public void setHeadAnimControl(AnimControl headAnimControl) {
-        this.headAnimControl = headAnimControl;
-    }
-
     public AnimChannel getBodyAnimChannel() {
         return bodyAnimChannel;
     }
 
     public void setBodyAnimChannel(AnimChannel bodyAnimChannel) {
         this.bodyAnimChannel = bodyAnimChannel;
-    }
-
-    public AnimChannel getHeadAnimChannel() {
-        return headAnimChannel;
-    }
-
-    public void setHeadAnimChannel(AnimChannel headAnimChannel) {
-        this.headAnimChannel = headAnimChannel;
     }
 
     public String getAnimationName() {
