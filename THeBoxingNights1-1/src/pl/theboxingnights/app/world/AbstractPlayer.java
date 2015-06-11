@@ -211,12 +211,13 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         float xDistance = playerNode.getWorldTranslation().getX() - opponent.getPlayerNode().getWorldTranslation().getX();
         float zDistance = playerNode.getWorldTranslation().getZ() - opponent.getPlayerNode().getWorldTranslation().getZ();
         float maxDifference = 6.0f;
-        float denominator = 1.8f;
+        float denominator = 1.75f;
         float difference = xDistance + zDistance;
         if (difference < 0) difference *= -1;
         difference = (float) Math.sqrt(difference);
 
         bodyNode.lookAt(new Vector3f(direction.getX(), (maxDifference - difference) / denominator , direction.getZ()), Vector3f.UNIT_Y);
+        bodyNode.rotate(0, 3.2f, 0);
     }
 
     @Override

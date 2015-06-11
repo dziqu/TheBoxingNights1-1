@@ -6,11 +6,17 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.FlyByCamera;
+import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
+import com.jme3.scene.shape.Box;
+import com.jme3.texture.Texture;
 import pl.theboxingnights.app.world.player.FirstControl;
 import pl.theboxingnights.app.world.player.SecondControl;
 
@@ -30,6 +36,8 @@ public class MyWorld extends AbstractAppState {
     private com.jme3.scene.Node rootNode;
     private FlyByCamera flyCam;
     private Camera cam;
+    private Geometry cube1Geo;
+    private RigidBodyControl rbc;
 
     public MyWorld() {
 
@@ -68,15 +76,15 @@ public class MyWorld extends AbstractAppState {
         player2.setLocalTranslation(new Vector3f(-9, 1, -9));
         player2.setKeyControl(new SecondControl(this.app));
 
+        player1.setOpponent(player2);
+        player2.setOpponent(player1);
+
     }
 
     @Override
     public void update(float tpf) {
         player1.update(tpf);
         player2.update(tpf);
-
-        player1.lookAt(player2.getPlayerNode().getWorldTranslation());
-        player2.lookAt(player1.getPlayerNode().getWorldTranslation());
     }
 
     public BulletAppState getBulletAppState() {
