@@ -1,31 +1,42 @@
 package pl.theboxingnights.app.world;
 
-import com.jme3.animation.AnimChannel;
-import com.jme3.animation.AnimControl;
-import com.jme3.animation.AnimEventListener;
+import com.jme3.animation.*;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.PhysicsTickListener;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.collision.Collidable;
+import com.jme3.collision.CollisionResults;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
+import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
+import com.jme3.texture.Texture;
 import pl.theboxingnights.app.world.player.*;
 
 /**
  * Created by filip / 08.06.15 / 03:45
  */
-public abstract class AbstractPlayer extends AbstractAppState implements WorldObject, AnimEventListener {
+public abstract class AbstractPlayer extends AbstractAppState implements WorldObject, AnimEventListener, PhysicsTickListener {
 
     private final AssetManager assetManager;
     private final com.jme3.scene.Node rootNode;
     private final InputManager inputManager;
+    private final BulletAppState bulletAppState;
     private SimpleApplication app;
     private AppStateManager stateManager;
     private com.jme3.scene.Node playerNode;
@@ -56,14 +67,52 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         setStateManager(this.getApp().getStateManager());
         rootNode = this.getApp().getRootNode();
         inputManager = this.getApp().getInputManager();
+        bulletAppState = getStateManager().getState(BulletAppState.class);
         loadPlayer();
         initAnimInstances();
+
+        SkeletonControl skeletonControl = getPlayerNode().getChild("Body").getControl(SkeletonControl.class);
+
+        Box cube1Mesh = new Box( 1f,1f,1f);
+        Geometry cube1Geo = new Geometry("My Textured Box", cube1Mesh);
+        cube1Geo.setName("cubeGeo");
+        Material cube1Mat = new Material(assetManager,
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        Texture cube1Tex = assetManager.loadTexture(
+                "Interface/Logo/Monkey.jpg");
+        cube1Mat.setTexture("ColorMap", cube1Tex);
+        cube1Geo.setMaterial(cube1Mat);
+
+        GhostControl ghost = new GhostControl(
+                new BoxCollisionShape(new Vector3f(.5f,.5f,.5f)));
+
+        Node n = skeletonControl.getAttachmentsNode("Bone.003");
+        n.attachChild(cube1Geo);
+        cube1Geo.addControl(ghost);
+        bulletAppState.getPhysicsSpace().add(ghost);
+
+        Geometry cube1Geo2 = new Geometry("My Textured Box", cube1Mesh);
+        cube1Geo2.setName("cubeGeo2");
+        Material cube1Mat2 = new Material(assetManager,
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        Texture cube1Tex2 = assetManager.loadTexture(
+                "Interface/Logo/Monkey.jpg");
+        cube1Mat2.setTexture("ColorMap", cube1Tex2);
+        cube1Geo2.setMaterial(cube1Mat2);
+
+        GhostControl ghost2 = new GhostControl(
+                new BoxCollisionShape(new Vector3f(.5f,.5f,.5f)));
+
+        Node n2 = skeletonControl.getAttachmentsNode("Bone.006");
+        n2.attachChild(cube1Geo2);
+        cube1Geo2.addControl(ghost2);
+        bulletAppState.getPhysicsSpace().add(ghost2);
     }
 
     private void loadPlayer() {
         setPlayerNode((Node) getAssetManager().loadModel(getLocation()));
         getPlayerNode().setLocalTranslation(new Vector3f(0, 1, 0));
-        setBetterCharacterControl(new BetterCharacterControl(1f, 4f, 1f));
+        setBetterCharacterControl(new BetterCharacterControl(.5f, 3f, 1f));
         getBetterCharacterControl().setGravity(new Vector3f(0, -10, 0));
         getPlayerNode().addControl(getBetterCharacterControl());
         getStateManager().getState(BulletAppState.class).getPhysicsSpace().add(getBetterCharacterControl());
@@ -90,8 +139,8 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     @Override
     public void update (float tpf) {
         setKeysActions();
-        counter += tpf;
         lookAt(opponent.getPlayerNode().getWorldTranslation());
+        checkCollisions();
     }
 
     private void setKeysActions() {
@@ -121,6 +170,14 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         if (!animationChannel.getAnimationName().equals(animationName)) {
             animationChannel.setAnim(animationName);
         }
+    }
+
+    private void checkCollisions() {
+        CollisionResults results = new CollisionResults();
+        Spatial n1 = playerNode.getChild("cubeGeo");
+        Spatial n2 = opponent.getPlayerNode().getChild("cubeGeo2");
+        n1.collideWith((Collidable) n2.getWorldBound(), results);
+        System.out.println(results.size());
     }
 
     public SimpleApplication getApp() {
@@ -228,6 +285,15 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     @Override
     public void onAnimChange(AnimControl animControl, AnimChannel animChannel, String s) {
 
+    }
+
+    @Override
+    public void prePhysicsTick(PhysicsSpace space, float tpf){
+        // apply state changes ...
+    }
+    @Override
+    public void physicsTick(PhysicsSpace space, float tpf){
+        // poll game state ...
     }
 
     public AssetManager getAssetManager() {
