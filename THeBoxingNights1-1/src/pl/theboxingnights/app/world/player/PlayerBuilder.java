@@ -92,9 +92,9 @@ public class PlayerBuilder {
     }
 
     public void getBones() {
-        leftHandBone = skeletonControl.getAttachmentsNode("Bone.006");
-        rightHandBone = skeletonControl.getAttachmentsNode("Bone.003");
-        headBone = skeletonControl.getAttachmentsNode("Bone.007");
+        leftHandBone = skeletonControl.getAttachmentsNode("Forearm.L");
+        rightHandBone = skeletonControl.getAttachmentsNode("Forearm.R");
+        headBone = skeletonControl.getAttachmentsNode("Head");
     }
 
     public void addBoxingItemsToBody() {

@@ -12,6 +12,7 @@ import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import pl.theboxingnights.app.world.player.*;
@@ -25,8 +26,8 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private final com.jme3.scene.Node rootNode;
     private final InputManager inputManager;
     private final BulletAppState bulletAppState;
-    private SimpleApplication app;
-    private AppStateManager stateManager;
+    private final SimpleApplication app;
+    private final AppStateManager stateManager;
     private com.jme3.scene.Node playerNode;
     private String name;
     private String location;
@@ -43,18 +44,22 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private AbstractPlayer opponent;
     private double yDistance;
     private float counter;
+    private SkeletonControl skeletonControl;
+    private Bone leftHandBone;
+    private float leftHandYPosition;
 
     public AbstractPlayer(SimpleApplication app, String name, String location) {
-        setName(name);
-        setLocation(location);
-        setApp(app);
+        this.app = (SimpleApplication) app;
+        this.name = name;
+        this.location = location;
         assetManager = this.getApp().getAssetManager();
-        setStateManager(this.getApp().getStateManager());
+        stateManager = this.app.getStateManager();
         rootNode = this.getApp().getRootNode();
         inputManager = this.getApp().getInputManager();
         bulletAppState = getStateManager().getState(BulletAppState.class);
         loadPlayer();
         initAnimInstances();
+//        initBones();
 
         new PlayerBuilder(this);
     }
@@ -79,6 +84,12 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         getBodyAnimChannel().setAnim(getAnimationName());
     }
 
+    private void initBones() {
+        skeletonControl = bodyNode.getControl(SkeletonControl.class);
+        leftHandBone = skeletonControl.getSkeleton().getBone("Forearm.L");
+        leftHandYPosition = leftHandBone.getLocalPosition().getY();
+    }
+
     @Override
     public void update (float tpf) {
         setKeysActionsAndAnimations();
@@ -88,6 +99,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     private void setKeysActionsAndAnimations() {
         setKeyAction(null);
+        setAnimationName(null);
         if (getKeyControl().isUpKey()) {
             setKeyAction(new Up(this));
             setAnimationName(AnimationsNames.getStepAnimationName());
@@ -100,12 +112,18 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         } else if (getKeyControl().isRightKey()) {
             setKeyAction(new Right(this));
             setAnimationName(AnimationsNames.getStepAnimationName());
+        } else if (getKeyControl().isLeftJabKey()) {
+//            setAnimationName(AnimationsNames.getLeftJabAnimationName());
+//            leftHandBone.setUserControl(true);
+//            float nextY = leftHandYPosition + 2;
+//            leftHandBone.setUserTransforms(new Vector3f(0, nextY, 0), new Quaternion(leftHandBone.getLocalRotation()), leftHandBone.getLocalScale());
+//            leftHandBone.setUserTransforms(new Vector3f(leftHandYPosition, leftHandYPosition, leftHandYPosition), new Quaternion(leftHandBone.getLocalRotation()), leftHandBone.getLocalScale());
         } else {
             setKeyAction(new Position(this));
             setAnimationName(AnimationsNames.getPositionAnimationName());
         }
-        getKeyAction().make();
-        setAnimation(getBodyAnimChannel(), getAnimationName());
+        if (getKeyAction()  != null) getKeyAction().make();
+        if (getAnimationName() != null) setAnimation(getBodyAnimChannel(), getAnimationName());
     }
 
     private void setAnimation(AnimChannel animationChannel, String animationName) {
@@ -122,16 +140,8 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         return app;
     }
 
-    public void setApp(SimpleApplication app) {
-        this.app = app;
-    }
-
     public AppStateManager getStateManager() {
         return stateManager;
-    }
-
-    public void setStateManager(AppStateManager stateManager) {
-        this.stateManager = stateManager;
     }
 
     public com.jme3.scene.Node getPlayerNode() {
