@@ -39,7 +39,7 @@ public class LeftJab extends AbstractKeyAction {
         Vector3f dirVector = new Vector3f(distX * speedRatio, y, distZ * speedRatio).negate();
         dirVector = new Vector3f(dirVector.getX(), y, dirVector.getZ());
 
-        return dirVector;
+        return null;
     }
 
     @Override
