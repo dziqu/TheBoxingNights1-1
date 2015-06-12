@@ -58,9 +58,9 @@ public class PlayerBuilder {
     }
 
     public void initGhostControls() {
-        leftHandGhostControl = new GhostControl(new BoxCollisionShape(new Vector3f(.3f, .2f, .5f)));
+        leftHandGhostControl = new GhostControl(new BoxCollisionShape(new Vector3f(.3f, .2f, .7f)));
         rightHandGhostControl = new GhostControl(new BoxCollisionShape(new Vector3f(.3f, .2f, .5f)));
-        headGhostControl = new GhostControl(new BoxCollisionShape(new Vector3f(.3f, .4f, .5f)));
+        headGhostControl = new GhostControl(new BoxCollisionShape(new Vector3f(.6f, .6f, 1f)));
     }
 
     public void buildBoxingGloves() {
@@ -82,7 +82,7 @@ public class PlayerBuilder {
     }
 
     public void buildBoxingHelmet() {
-        Box cube1Mesh = new Box( 1f,1f,1.2f);
+        Box cube1Mesh = new Box( 1.3f,1f,1.2f);
         headGeo = new Geometry("My Textured Box", cube1Mesh);
         headGeo.setLocalTranslation(new Vector3f(headGeo.getLocalTranslation().getX(), headGeo.getLocalTranslation().getY(), headGeo.getLocalTranslation().getZ() - 2f));
         headGeo.setName("headGeo");

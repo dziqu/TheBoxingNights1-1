@@ -140,8 +140,10 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         Spatial node2 = getOpponent().getPlayerNode().getChild("headGeo");
         node1.collideWith((Collidable) node2.getWorldBound(), results);
         if (results.size() > 0) {
-            points++;
-            System.out.println(getName() + ": " + points);
+            if (animationName.compareTo(AnimationsNames.getLeftJabAnimationName()) == 0) {
+                points++;
+                System.out.println(getName() + ": " + points);
+            }
         }
     }
 
