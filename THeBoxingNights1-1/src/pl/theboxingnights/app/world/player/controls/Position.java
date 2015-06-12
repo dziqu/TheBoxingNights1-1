@@ -1,5 +1,6 @@
-package pl.theboxingnights.app.world.player;
+package pl.theboxingnights.app.world.player.controls;
 
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import pl.theboxingnights.app.world.AbstractPlayer;
 
@@ -16,6 +17,11 @@ public class Position extends AbstractKeyAction {
     @Override
     public Vector3f getWalkDirection() {
         return new Vector3f(0, 0, 0);
+    }
+
+    @Override
+    public Quaternion getRotation() {
+        return null;
     }
 
 }

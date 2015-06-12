@@ -1,5 +1,6 @@
-package pl.theboxingnights.app.world.player;
+package pl.theboxingnights.app.world.player.controls;
 
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 
 /**
@@ -10,5 +11,7 @@ public interface KeyAction {
     public void make();
 
     public Vector3f getWalkDirection();
+
+    public Quaternion getRotation();
 
 }

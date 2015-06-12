@@ -1,10 +1,6 @@
-package pl.theboxingnights.app.world.player;
+package pl.theboxingnights.app.world.player.controls;
 
-import com.jme3.animation.AnimChannel;
-import com.jme3.animation.AnimControl;
-import com.jme3.animation.AnimEventListener;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
 import pl.theboxingnights.app.world.AbstractPlayer;
 
 /**
@@ -19,7 +15,12 @@ public abstract class AbstractKeyAction implements KeyAction {
     }
 
     public void make() {
-        getPlayer().getBetterCharacterControl().setWalkDirection(getWalkDirection());
+        if (getWalkDirection() != null) {
+            getPlayer().getBetterCharacterControl().setWalkDirection(getWalkDirection());
+        }
+        if (getRotation() != null) {
+            getPlayer().getPlayerNode().rotate(getRotation());
+        }
     }
 
     public AbstractPlayer getPlayer() {

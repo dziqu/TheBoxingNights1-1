@@ -61,19 +61,19 @@ public class MyWorld extends AbstractAppState {
 
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
-        bulletAppState.setDebugEnabled(true);
+        bulletAppState.setDebugEnabled(false);
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
 
         scene = new Scene(this.app, "ring" + "Scene", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend");
 
         player1 = new UserPlayer(this.app, "Antek" + "Player", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend");
         player1.setScale(.4f);
-        player1.setLocalTranslation(new Vector3f(9, 1, 9));
+        player1.setLocalTranslation(new Vector3f(9, 5, 9));
         player1.setKeyControl(new FirstControl(this.app));
 
         player2 = new UserPlayer(this.app, "Zenek" + "Player", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend");
         player2.setScale(.4f);
-        player2.setLocalTranslation(new Vector3f(-9, 1, -9));
+        player2.setLocalTranslation(new Vector3f(-9, 5, -9));
         player2.setKeyControl(new SecondControl(this.app));
 
         player1.setOpponent(player2);

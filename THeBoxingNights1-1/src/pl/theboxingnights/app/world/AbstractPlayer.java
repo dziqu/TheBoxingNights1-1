@@ -12,10 +12,10 @@ import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import pl.theboxingnights.app.world.player.*;
+import pl.theboxingnights.app.world.player.controls.*;
 
 /**
  * Created by filip / 08.06.15 / 03:45
@@ -47,19 +47,21 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private SkeletonControl skeletonControl;
     private Bone leftHandBone;
     private float leftHandYPosition;
+    private Bone leftArm;
+    private Vector3f lookAtDirection;
 
     public AbstractPlayer(SimpleApplication app, String name, String location) {
         this.app = (SimpleApplication) app;
-        this.name = name;
-        this.location = location;
+        this.setName(name);
+        this.setLocation(location);
         assetManager = this.getApp().getAssetManager();
-        stateManager = this.app.getStateManager();
+        stateManager = this.getApp().getStateManager();
         rootNode = this.getApp().getRootNode();
         inputManager = this.getApp().getInputManager();
         bulletAppState = getStateManager().getState(BulletAppState.class);
         loadPlayer();
         initAnimInstances();
-//        initBones();
+        initSkeletonControl();
 
         new PlayerBuilder(this);
     }
@@ -84,22 +86,21 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         getBodyAnimChannel().setAnim(getAnimationName());
     }
 
-    private void initBones() {
-        skeletonControl = bodyNode.getControl(SkeletonControl.class);
-        leftHandBone = skeletonControl.getSkeleton().getBone("Forearm.L");
-        leftHandYPosition = leftHandBone.getLocalPosition().getY();
+    private void initSkeletonControl() {
+        setSkeletonControl(getBodyNode().getControl(SkeletonControl.class));
     }
 
     @Override
     public void update (float tpf) {
         setKeysActionsAndAnimations();
-        lookAt(opponent.getPlayerNode().getWorldTranslation());
+        lookAt(getOpponent().getPlayerNode().getWorldTranslation());
         checkCollisions();
     }
 
     private void setKeysActionsAndAnimations() {
         setKeyAction(null);
         setAnimationName(null);
+        setLeftArm(null);
         if (getKeyControl().isUpKey()) {
             setKeyAction(new Up(this));
             setAnimationName(AnimationsNames.getStepAnimationName());
@@ -113,11 +114,8 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
             setKeyAction(new Right(this));
             setAnimationName(AnimationsNames.getStepAnimationName());
         } else if (getKeyControl().isLeftJabKey()) {
-//            setAnimationName(AnimationsNames.getLeftJabAnimationName());
-//            leftHandBone.setUserControl(true);
-//            float nextY = leftHandYPosition + 2;
-//            leftHandBone.setUserTransforms(new Vector3f(0, nextY, 0), new Quaternion(leftHandBone.getLocalRotation()), leftHandBone.getLocalScale());
-//            leftHandBone.setUserTransforms(new Vector3f(leftHandYPosition, leftHandYPosition, leftHandYPosition), new Quaternion(leftHandBone.getLocalRotation()), leftHandBone.getLocalScale());
+            setKeyAction(new LeftJab(this));
+            setAnimationName(AnimationsNames.getLeftJabAnimationName());
         } else {
             setKeyAction(new Position(this));
             setAnimationName(AnimationsNames.getPositionAnimationName());
@@ -134,6 +132,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     private void checkCollisions() {
         CollisionResults results = new CollisionResults();
+
     }
 
     public SimpleApplication getApp() {
@@ -211,18 +210,23 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     }
 
     public void lookAt(Vector3f direction) {
-        bodyNode = (Node) getPlayerNode().getChild("Body");
+        setBodyNode((Node) getPlayerNode().getChild("Body"));
 
-        float xDistance = playerNode.getWorldTranslation().getX() - opponent.getPlayerNode().getWorldTranslation().getX();
-        float zDistance = playerNode.getWorldTranslation().getZ() - opponent.getPlayerNode().getWorldTranslation().getZ();
+        float xDistance = getPlayerNode().getWorldTranslation().getX() - getOpponent().getPlayerNode().getWorldTranslation().getX();
+        float zDistance = getPlayerNode().getWorldTranslation().getZ() - getOpponent().getPlayerNode().getWorldTranslation().getZ();
         float maxDifference = 6.0f;
         float denominator = 1.8f;
         float difference = xDistance + zDistance;
         if (difference < 0) difference *= -1;
         difference = (float) Math.sqrt(difference);
 
-        bodyNode.lookAt(new Vector3f(direction.getX(), (maxDifference - difference) / denominator , direction.getZ()), Vector3f.UNIT_Y);
-        bodyNode.rotate(0, 3.2f, 0);
+        getBodyNode().lookAt(new Vector3f(direction.getX(), (maxDifference - difference) / denominator, direction.getZ()), Vector3f.UNIT_Y);
+        lookAtDirection = new Vector3f(direction.getX(), (maxDifference - difference) / denominator, direction.getZ());
+        getBodyNode().rotate(0, 3.2f, 0);
+    }
+
+    public Vector3f getLookAtDirection() {
+        return lookAtDirection;
     }
 
     @Override
@@ -306,5 +310,61 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     public void setOpponent(AbstractPlayer opponent) {
         this.opponent = opponent;
+    }
+
+    public BulletAppState getBulletAppState() {
+        return bulletAppState;
+    }
+
+    public AbstractPlayer getOpponent() {
+        return opponent;
+    }
+
+    public double getyDistance() {
+        return yDistance;
+    }
+
+    public void setyDistance(double yDistance) {
+        this.yDistance = yDistance;
+    }
+
+    public float getCounter() {
+        return counter;
+    }
+
+    public void setCounter(float counter) {
+        this.counter = counter;
+    }
+
+    public SkeletonControl getSkeletonControl() {
+        return skeletonControl;
+    }
+
+    public void setSkeletonControl(SkeletonControl skeletonControl) {
+        this.skeletonControl = skeletonControl;
+    }
+
+    public Bone getLeftHandBone() {
+        return leftHandBone;
+    }
+
+    public void setLeftHandBone(Bone leftHandBone) {
+        this.leftHandBone = leftHandBone;
+    }
+
+    public float getLeftHandYPosition() {
+        return leftHandYPosition;
+    }
+
+    public void setLeftHandYPosition(float leftHandYPosition) {
+        this.leftHandYPosition = leftHandYPosition;
+    }
+
+    public Bone getLeftArm() {
+        return leftArm;
+    }
+
+    public void setLeftArm(Bone leftArm) {
+        this.leftArm = leftArm;
     }
 }
