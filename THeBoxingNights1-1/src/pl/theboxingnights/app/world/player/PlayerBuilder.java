@@ -60,7 +60,7 @@ public class PlayerBuilder {
     public void initGhostControls() {
         leftHandGhostControl = new GhostControl(new BoxCollisionShape(new Vector3f(.3f, .2f, .5f)));
         rightHandGhostControl = new GhostControl(new BoxCollisionShape(new Vector3f(.3f, .2f, .5f)));
-        headGhostControl = new GhostControl(new BoxCollisionShape(new Vector3f(.3f, .2f, .5f)));
+        headGhostControl = new GhostControl(new BoxCollisionShape(new Vector3f(.3f, .4f, .5f)));
     }
 
     public void buildBoxingGloves() {

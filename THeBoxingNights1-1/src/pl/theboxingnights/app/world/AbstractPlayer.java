@@ -10,10 +10,13 @@ import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
+import com.jme3.collision.Collidable;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import pl.theboxingnights.app.world.player.*;
 import pl.theboxingnights.app.world.player.controls.*;
 
@@ -49,6 +52,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private float leftHandYPosition;
     private Bone leftArm;
     private Vector3f lookAtDirection;
+    private int points = 0;
 
     public AbstractPlayer(SimpleApplication app, String name, String location) {
         this.app = (SimpleApplication) app;
@@ -132,7 +136,13 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     private void checkCollisions() {
         CollisionResults results = new CollisionResults();
-
+        Spatial node1 = getPlayerNode().getChild("leftGloveGeo");
+        Spatial node2 = getOpponent().getPlayerNode().getChild("headGeo");
+        node1.collideWith((Collidable) node2.getWorldBound(), results);
+        if (results.size() > 0) {
+            points++;
+            System.out.println(getName() + ": " + points);
+        }
     }
 
     public SimpleApplication getApp() {

@@ -61,7 +61,7 @@ public class MyWorld extends AbstractAppState {
 
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
-        bulletAppState.setDebugEnabled(false);
+        bulletAppState.setDebugEnabled(true);
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
 
         scene = new Scene(this.app, "ring" + "Scene", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend");
