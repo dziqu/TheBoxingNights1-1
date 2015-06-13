@@ -14,6 +14,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import pl.theboxingnights.app.other.calculator.Calculator;
+import pl.theboxingnights.app.other.comparator.Comparator;
+import pl.theboxingnights.app.other.comparator.SimpleBooleanComparator;
 import pl.theboxingnights.app.world.player.AbstractControl;
 import pl.theboxingnights.app.world.player.AnimationsNames;
 import pl.theboxingnights.app.world.player.PlayerBuilder;
@@ -88,34 +90,36 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         setKeyAction(null);
         setAnimationName(null);
 
-        if (getKeyControl().isUpKey()) {
+        SimpleBooleanComparator simpleBooleanComparator = x -> x == true;
+
+        if (Comparator.compare(getKeyControl().isUpKey(), simpleBooleanComparator)) {
             setKeyAction(new Up(this));
             setAnimationName(AnimationsNames.getStepAnimationName());
-        } else if (getKeyControl().isDownKey()) {
+        } else if (Comparator.compare(getKeyControl().isDownKey(), simpleBooleanComparator)) {
             setKeyAction(new Down(this));
             setAnimationName(AnimationsNames.getStepAnimationName());
-        } else if (getKeyControl().isLeftKey()) {
+        } else if (Comparator.compare(getKeyControl().isLeftKey(), simpleBooleanComparator)) {
             setKeyAction(new Left(this));
             setAnimationName(AnimationsNames.getStepAnimationName());
-        } else if (getKeyControl().isRightKey()) {
+        } else if (Comparator.compare(getKeyControl().isRightKey(), simpleBooleanComparator)) {
             setKeyAction(new Right(this));
             setAnimationName(AnimationsNames.getStepAnimationName());
-        } else if (getKeyControl().isLeftJabKey()) {
+        } else if (Comparator.compare(getKeyControl().isLeftJabKey(), simpleBooleanComparator)) {
             setKeyAction(new LeftJab(this));
             setAnimationName(AnimationsNames.getLeftJabAnimationName());
-        } else if (getKeyControl().isRightJabKey()) {
+        } else if (Comparator.compare(getKeyControl().isRightJabKey(), simpleBooleanComparator)) {
             setKeyAction(new RightJab(this));
             setAnimationName(AnimationsNames.getRightJabAnimationName());
-        } else if (getKeyControl().isLeftHookKey()) {
+        } else if (Comparator.compare(getKeyControl().isLeftHookKey(), simpleBooleanComparator)) {
             setKeyAction(new LeftHook(this));
             setAnimationName(AnimationsNames.getLeftHookAnimationName());
-        } else if (getKeyControl().isRightHookKey()) {
+        } else if (Comparator.compare(getKeyControl().isRightHookKey(), simpleBooleanComparator)) {
             setKeyAction(new RightHook(this));
             setAnimationName(AnimationsNames.getRightHookAnimationName());
-        } else if (getKeyControl().isLeftUppercutKey()) {
+        } else if (Comparator.compare(getKeyControl().isLeftUppercutKey(), simpleBooleanComparator)) {
             setKeyAction(new LeftUppercut(this));
             setAnimationName(AnimationsNames.getLeftUppercutAnimationName());
-        } else if (getKeyControl().isRightUppercutKey()) {
+        } else if (Comparator.compare(getKeyControl().isRightUppercutKey(), simpleBooleanComparator)) {
             setKeyAction(new RightUppercut(this));
             setAnimationName(AnimationsNames.getRightUppercutAnimationName());
         } else {
@@ -205,9 +209,12 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         float maxDifference = 6.0f;
         float denominator = 1.8f;
         float difference = Calculator.calculate((x, y)->x+y, xDistance, zDistance);
-        if (difference < 0) difference *= -1;
+        if (Comparator.compare(difference, x -> x < 0)) difference = Calculator.calculate((x,y)->x*y, difference, -1f);
         difference = (float) Math.sqrt(difference);
-        getBodyNode().lookAt(new Vector3f(direction.getX(), Calculator.calculate((x, y) -> x/y, (maxDifference - difference), denominator), direction.getZ()), Vector3f.UNIT_Y);
+        getBodyNode().lookAt(
+                        new Vector3f(direction.getX(),
+                        Calculator.calculate((x, y) -> x/y, (Calculator.calculate((x,y)->x-y, maxDifference, difference)), denominator),
+                        direction.getZ()), Vector3f.UNIT_Y);
         getBodyNode().rotate(0, 3.2f, 0);
     }
 
