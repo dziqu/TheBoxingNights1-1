@@ -120,6 +120,21 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         } else if (getKeyControl().isLeftJabKey()) {
             setKeyAction(new LeftJab(this));
             setAnimationName(AnimationsNames.getLeftJabAnimationName());
+        } else if (getKeyControl().isRightJabKey()) {
+            setKeyAction(new RightJab(this));
+            setAnimationName(AnimationsNames.getRightJabAnimationName());
+        } else if (getKeyControl().isLeftHookKey()) {
+            setKeyAction(new LeftHook(this));
+            setAnimationName(AnimationsNames.getLeftHookAnimationName());
+        } else if (getKeyControl().isRightHookKey()) {
+            setKeyAction(new RightHook(this));
+            setAnimationName(AnimationsNames.getRightHookAnimationName());
+        } else if (getKeyControl().isLeftUppercutKey()) {
+            setKeyAction(new LeftUppercut(this));
+            setAnimationName(AnimationsNames.getLeftUppercutAnimationName());
+        } else if (getKeyControl().isRightUppercutKey()) {
+            setKeyAction(new RightUppercut(this));
+            setAnimationName(AnimationsNames.getRightUppercutAnimationName());
         } else {
             setKeyAction(new Position(this));
             setAnimationName(AnimationsNames.getPositionAnimationName());
