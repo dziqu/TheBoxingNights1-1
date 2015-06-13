@@ -1,7 +1,7 @@
 package pl.theboxingnights.app.start;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.system.AppSettings;
+import pl.theboxingnights.app.other.Calculator;
 import pl.theboxingnights.app.settings.Settings;
 import pl.theboxingnights.app.world.MyWorld;
 
@@ -9,7 +9,8 @@ import pl.theboxingnights.app.world.MyWorld;
  * Created by filip / 07.06.15 / 06:55
  */
 public class Start extends SimpleApplication {
-
+//    TODO: dodaj wyrażenia regularne do każdej z metod w celu sprawdzenia poprawności argumentu
+//    TODO: dodać wyrażenia lambda
     public static void main (String [] args) {
         Start app = new Start();
         app.start();

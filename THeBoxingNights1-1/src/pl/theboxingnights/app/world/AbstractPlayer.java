@@ -9,14 +9,17 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.bullet.control.GhostControl;
 import com.jme3.collision.CollisionResults;
-import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import pl.theboxingnights.app.world.player.*;
+import pl.theboxingnights.app.other.*;
+import pl.theboxingnights.app.world.player.AbstractControl;
+import pl.theboxingnights.app.world.player.AnimationsNames;
+import pl.theboxingnights.app.world.player.PlayerBuilder;
 import pl.theboxingnights.app.world.player.controls.*;
+
+import java.lang.Math;
 
 /**
  * Created by filip / 08.06.15 / 03:45
@@ -25,14 +28,11 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     private final AssetManager assetManager;
     private final com.jme3.scene.Node rootNode;
-    private final InputManager inputManager;
-    private final BulletAppState bulletAppState;
     private final SimpleApplication app;
     private final AppStateManager stateManager;
     private com.jme3.scene.Node playerNode;
     private String name;
     private String location;
-    private float scale;
     private BetterCharacterControl betterCharacterControl;
     private AbstractControl keyControl;
     private AbstractKeyAction keyAction;
@@ -41,13 +41,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private AnimChannel bodyAnimChannel;
     private String animationName = "position";
     private AbstractPlayer opponent;
-    private double yDistance;
-    private float counter;
-    private SkeletonControl skeletonControl;
-    private Bone leftHandBone;
-    private float leftHandYPosition;
-    private Bone leftArm;
-    private Vector3f lookAtDirection;
     private int points = 0;
 
     public AbstractPlayer(SimpleApplication app, String name, String location) {
@@ -57,11 +50,8 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         assetManager = this.getApp().getAssetManager();
         stateManager = this.getApp().getStateManager();
         rootNode = this.getApp().getRootNode();
-        inputManager = this.getApp().getInputManager();
-        bulletAppState = getStateManager().getState(BulletAppState.class);
         loadPlayer();
         initAnimInstances();
-        initSkeletonControl();
 
         new PlayerBuilder(this);
     }
@@ -86,10 +76,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         getBodyAnimChannel().setAnim(getAnimationName());
     }
 
-    private void initSkeletonControl() {
-        setSkeletonControl(getBodyNode().getControl(SkeletonControl.class));
-    }
-
     @Override
     public void update (float tpf) {
         setKeysActionsAndAnimations();
@@ -100,7 +86,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private void setKeysActionsAndAnimations() {
         setKeyAction(null);
         setAnimationName(null);
-        setLeftArm(null);
         if (getKeyControl().isUpKey()) {
             setKeyAction(new Up(this));
             setAnimationName(AnimationsNames.getStepAnimationName());
@@ -192,9 +177,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         this.location = location;
     }
 
-    public void setLocationAtTheScene(Vector3f locationAtTheScene) {
-    }
-
     @Override
     public void setLocalTranslation(Vector3f locationAtTheScene) {
         getPlayerNode().getControl(BetterCharacterControl.class).warp(locationAtTheScene);
@@ -213,27 +195,18 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         this.betterCharacterControl = betterCharacterControl;
     }
 
-    public void setGhostControl(GhostControl ghostControl) {
-    }
-
     public void lookAt(Vector3f direction) {
         setBodyNode((Node) getPlayerNode().getChild("Body"));
 
-        float xDistance = getPlayerNode().getWorldTranslation().getX() - getOpponent().getPlayerNode().getWorldTranslation().getX();
-        float zDistance = getPlayerNode().getWorldTranslation().getZ() - getOpponent().getPlayerNode().getWorldTranslation().getZ();
+        float xDistance = Calculator.calculate((x,y)->x-y, getPlayerNode().getWorldTranslation().getX(),  getOpponent().getPlayerNode().getWorldTranslation().getX() );
+        float zDistance = Calculator.calculate((x, y) -> x-y, getPlayerNode().getWorldTranslation().getZ(),getOpponent().getPlayerNode().getWorldTranslation().getZ() );
         float maxDifference = 6.0f;
         float denominator = 1.8f;
-        float difference = xDistance + zDistance;
+        float difference = Calculator.calculate((x, y)->x+y, xDistance, zDistance);
         if (difference < 0) difference *= -1;
         difference = (float) Math.sqrt(difference);
-
-        getBodyNode().lookAt(new Vector3f(direction.getX(), (maxDifference - difference) / denominator, direction.getZ()), Vector3f.UNIT_Y);
-        setLookAtDirection(new Vector3f(direction.getX(), (maxDifference - difference) / denominator, direction.getZ()));
+        getBodyNode().lookAt(new Vector3f(direction.getX(), Calculator.calculate((x, y) -> x/y, (maxDifference - difference), denominator), direction.getZ()), Vector3f.UNIT_Y);
         getBodyNode().rotate(0, 3.2f, 0);
-    }
-
-    public Vector3f getLookAtDirection() {
-        return lookAtDirection;
     }
 
     @Override
@@ -261,10 +234,6 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     public Node getRootNode() {
         return rootNode;
-    }
-
-    public InputManager getInputManager() {
-        return inputManager;
     }
 
     public AbstractControl getKeyControl() {
@@ -315,72 +284,12 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         this.animationName = animationName;
     }
 
-    public BulletAppState getBulletAppState() {
-        return bulletAppState;
-    }
-
     public AbstractPlayer getOpponent() {
         return opponent;
     }
 
     public void setOpponent(AbstractPlayer opponent) {
         this.opponent = opponent;
-    }
-
-    public double getyDistance() {
-        return yDistance;
-    }
-
-    public void setyDistance(double yDistance) {
-        this.yDistance = yDistance;
-    }
-
-    public float getCounter() {
-        return counter;
-    }
-
-    public void setCounter(float counter) {
-        this.counter = counter;
-    }
-
-    public SkeletonControl getSkeletonControl() {
-        return skeletonControl;
-    }
-
-    public void setSkeletonControl(SkeletonControl skeletonControl) {
-        this.skeletonControl = skeletonControl;
-    }
-
-    public Bone getLeftHandBone() {
-        return leftHandBone;
-    }
-
-    public void setLeftHandBone(Bone leftHandBone) {
-        this.leftHandBone = leftHandBone;
-    }
-
-    public float getLeftHandYPosition() {
-        return leftHandYPosition;
-    }
-
-    public void setLeftHandYPosition(float leftHandYPosition) {
-        this.leftHandYPosition = leftHandYPosition;
-    }
-
-    public Bone getLeftArm() {
-        return leftArm;
-    }
-
-    public void setLeftArm(Bone leftArm) {
-        this.leftArm = leftArm;
-    }
-
-    public float getScale() {
-        return scale;
-    }
-
-    public void setLookAtDirection(Vector3f lookAtDirection) {
-        this.lookAtDirection = lookAtDirection;
     }
 
     public int getPoints() {
@@ -390,4 +299,5 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     public void setPoints(int points) {
         this.points = points;
     }
+
 }
