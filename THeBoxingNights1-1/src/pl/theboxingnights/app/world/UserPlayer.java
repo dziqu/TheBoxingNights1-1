@@ -1,7 +1,5 @@
 package pl.theboxingnights.app.world;
 
-import com.jme3.animation.AnimChannel;
-import com.jme3.animation.AnimControl;
 import com.jme3.app.SimpleApplication;
 
 /**

@@ -8,10 +8,10 @@ import com.jme3.math.Vector3f;
  */
 public interface KeyAction {
 
-    public void make();
+    void make();
 
-    public Vector3f getWalkDirection();
+    Vector3f getWalkDirection();
 
-    public Quaternion getRotation();
+    Quaternion getRotation();
 
 }

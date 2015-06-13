@@ -13,18 +13,18 @@ public abstract class AbstractControl implements Controls, ActionListener {
     private final SimpleApplication app;
     private String className;
 
-    private String leftKeyName            = null;
-    private String rightKeyName           = "right";
-    private String upKeyName              = "up";
-    private String downKeyName            = "down";
-    private String leftJabKeyName         = "leftJab";
-    private String rightJabKeyName        = "rightJab";
-    private String leftHookKeyName        = "leftHook";
-    private String rightHookKeyName       = "rightHook";
-    private String leftUppercutKeyName    = "leftUppercut";
-    private String rightUppercutKeyName   = "rightUppercut";
-    private String guardKeyName           = "guard";
-    private String positionKeyName        = "position";
+    private String leftKeyName          = null;
+    private String rightKeyName         = null;
+    private String upKeyName            = null;
+    private String downKeyName          = null;
+    private String leftJabKeyName       = null;
+    private String rightJabKeyName      = null;
+    private String leftHookKeyName      = null;
+    private String rightHookKeyName     = null;
+    private String leftUppercutKeyName  = null;
+    private String rightUppercutKeyName = null;
+    private String guardKeyName         = null;
+    private String positionKeyName      = null;
 
     private int leftKeyValue            = 0;
     private int rightKeyValue           = 0;

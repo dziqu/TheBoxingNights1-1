@@ -20,8 +20,6 @@ public abstract class AbstractScene extends AbstractAppState implements WorldObj
     private Node sceneNode;
     private String name;
     private String location;
-    private Vector3f locationAtTheScene;
-    private float scale;
     private RigidBodyControl rigidBodyControl;
 
     public AbstractScene(SimpleApplication app, String name, String location) {
@@ -69,20 +67,10 @@ public abstract class AbstractScene extends AbstractAppState implements WorldObj
         this.location = location;
     }
 
-    public Vector3f getLocationAtTheScene() {
-        return locationAtTheScene;
-    }
-
     public void setLocalTranslation(Vector3f locationAtTheScene) {
-        this.locationAtTheScene = locationAtTheScene;
-    }
-
-    public float getScale() {
-        return scale;
     }
 
     public void setScale(float scale) {
-        this.scale = scale;
     }
 
     public RigidBodyControl getRigidBodyControl() {

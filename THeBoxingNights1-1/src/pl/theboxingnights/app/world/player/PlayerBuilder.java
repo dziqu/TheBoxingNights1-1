@@ -20,10 +20,8 @@ import pl.theboxingnights.app.world.AbstractPlayer;
  */
 public class PlayerBuilder {
 
-    private final SimpleApplication app;
     private final AbstractPlayer player;
     private final AssetManager assetManager;
-    private final AppStateManager stateManger;
     private final BulletAppState bulletAppState;
     private Geometry leftGloveGeo;
     private Geometry rightGloveGeo;
@@ -38,9 +36,9 @@ public class PlayerBuilder {
 
     public PlayerBuilder(AbstractPlayer player) {
         this.player = player;
-        app = player.getApp();
+        SimpleApplication app = player.getApp();
         assetManager = app.getAssetManager();
-        stateManger = app.getStateManager();
+        AppStateManager stateManger = app.getStateManager();
         bulletAppState = stateManger.getState(BulletAppState.class);
 
         initSkeletonControl();

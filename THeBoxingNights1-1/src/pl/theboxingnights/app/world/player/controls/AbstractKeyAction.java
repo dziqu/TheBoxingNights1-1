@@ -27,9 +27,9 @@ public abstract class AbstractKeyAction implements KeyAction {
         return player;
     }
 
-    public abstract Vector3f getWalkDirection();
-
     public void setPlayer(AbstractPlayer player) {
         this.player = player;
     }
+
+    public abstract Vector3f getWalkDirection();
 }

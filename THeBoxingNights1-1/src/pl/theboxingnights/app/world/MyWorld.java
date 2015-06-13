@@ -6,17 +6,13 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.FlyByCamera;
-import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
-import com.jme3.scene.shape.Box;
-import com.jme3.texture.Texture;
 import pl.theboxingnights.app.world.player.FirstControl;
 import pl.theboxingnights.app.world.player.SecondControl;
 
@@ -46,49 +42,140 @@ public class MyWorld extends AbstractAppState {
     @Override
     public void initialize (AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        this.app = (SimpleApplication) app;
-        this.stateManager = stateManager;
-        assetManager = this.app.getAssetManager();
-        bulletAppState = new BulletAppState();
-        rootNode = this.app.getRootNode();
+        this.setApp((SimpleApplication) app);
+        this.setStateManager(stateManager);
+        setAssetManager(this.getApp().getAssetManager());
+        setBulletAppState(new BulletAppState());
+        setRootNode(this.getApp().getRootNode());
 
-        cam = this.app.getCamera();
-        cam.setLocation(new Vector3f(.5043195f, 21.533813f, 18.173557f));
-        cam.setRotation(new Quaternion().set(6.101522E-4f, 0.90909696f, -0.41658196f, 0.0013310789f));
+        setCam(this.getApp().getCamera());
+        getCam().setLocation(new Vector3f(.5043195f, 21.533813f, 18.173557f));
+        getCam().setRotation(new Quaternion().set(6.101522E-4f, 0.90909696f, -0.41658196f, 0.0013310789f));
 
-        flyCam = this.app.getFlyByCamera();
-        flyCam.setEnabled(false);
+        setFlyCam(this.getApp().getFlyByCamera());
+        getFlyCam().setEnabled(false);
 
-        bulletAppState = new BulletAppState();
-        stateManager.attach(bulletAppState);
-        bulletAppState.setDebugEnabled(true);
-        assetManager.registerLoader(BlenderModelLoader.class, "blend");
+        setBulletAppState(new BulletAppState());
+        stateManager.attach(getBulletAppState());
+        getBulletAppState().setDebugEnabled(true);
+        getAssetManager().registerLoader(BlenderModelLoader.class, "blend");
 
-        scene = new Scene(this.app, "ring" + "Scene", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend");
+        setScene(new Scene(this.getApp(), "ring" + "Scene", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend"));
 
-        player1 = new UserPlayer(this.app, "Antek" + "Player", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend");
-        player1.setScale(.4f);
-        player1.setLocalTranslation(new Vector3f(9, 5, 9));
-        player1.setKeyControl(new FirstControl(this.app));
+        setPlayer1(new UserPlayer(this.getApp(), "Antek" + "Player", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend"));
+        getPlayer1().setScale(.4f);
+        getPlayer1().setLocalTranslation(new Vector3f(9, 5, 9));
+        getPlayer1().setKeyControl(new FirstControl(this.getApp()));
 
-        player2 = new UserPlayer(this.app, "Zenek" + "Player", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend");
-        player2.setScale(.4f);
-        player2.setLocalTranslation(new Vector3f(-9, 5, -9));
-        player2.setKeyControl(new SecondControl(this.app));
+        setPlayer2(new UserPlayer(this.getApp(), "Zenek" + "Player", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend"));
+        getPlayer2().setScale(.4f);
+        getPlayer2().setLocalTranslation(new Vector3f(-9, 5, -9));
+        getPlayer2().setKeyControl(new SecondControl(this.getApp()));
 
-        player1.setOpponent(player2);
-        player2.setOpponent(player1);
+        getPlayer1().setOpponent(getPlayer2());
+        getPlayer2().setOpponent(getPlayer1());
 
     }
 
     @Override
     public void update(float tpf) {
-        player1.update(tpf);
-        player2.update(tpf);
+        getPlayer1().update(tpf);
+        getPlayer2().update(tpf);
     }
 
     public BulletAppState getBulletAppState() {
-        return stateManager.getState(BulletAppState.class);
+        return bulletAppState;
     }
 
+    public SimpleApplication getApp() {
+        return app;
+    }
+
+    public void setApp(SimpleApplication app) {
+        this.app = app;
+    }
+
+    public AppStateManager getStateManager() {
+        return stateManager;
+    }
+
+    public void setStateManager(AppStateManager stateManager) {
+        this.stateManager = stateManager;
+    }
+
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
+
+    public void setAssetManager(AssetManager assetManager) {
+        this.assetManager = assetManager;
+    }
+
+    public WorldObject getScene() {
+        return scene;
+    }
+
+    public void setScene(WorldObject scene) {
+        this.scene = scene;
+    }
+
+    public AbstractPlayer getPlayer1() {
+        return player1;
+    }
+
+    public void setPlayer1(AbstractPlayer player1) {
+        this.player1 = player1;
+    }
+
+    public AbstractPlayer getPlayer2() {
+        return player2;
+    }
+
+    public void setPlayer2(AbstractPlayer player2) {
+        this.player2 = player2;
+    }
+
+    public void setBulletAppState(BulletAppState bulletAppState) {
+        this.bulletAppState = bulletAppState;
+    }
+
+    public com.jme3.scene.Node getRootNode() {
+        return rootNode;
+    }
+
+    public void setRootNode(com.jme3.scene.Node rootNode) {
+        this.rootNode = rootNode;
+    }
+
+    public FlyByCamera getFlyCam() {
+        return flyCam;
+    }
+
+    public void setFlyCam(FlyByCamera flyCam) {
+        this.flyCam = flyCam;
+    }
+
+    public Camera getCam() {
+        return cam;
+    }
+
+    public void setCam(Camera cam) {
+        this.cam = cam;
+    }
+
+    public Geometry getCube1Geo() {
+        return cube1Geo;
+    }
+
+    public void setCube1Geo(Geometry cube1Geo) {
+        this.cube1Geo = cube1Geo;
+    }
+
+    public RigidBodyControl getRbc() {
+        return rbc;
+    }
+
+    public void setRbc(RigidBodyControl rbc) {
+        this.rbc = rbc;
+    }
 }
