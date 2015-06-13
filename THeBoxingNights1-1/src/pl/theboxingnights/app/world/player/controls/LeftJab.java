@@ -15,30 +15,6 @@ public class LeftJab extends AbstractKeyAction {
 
     @Override
     public Vector3f getWalkDirection() {
-        Node opponentNode = getPlayer().getOpponent().getPlayerNode();
-        AbstractPlayer opponent = getPlayer().getOpponent();
-
-        float x = opponent.getLocationAtTheScene().getX();
-        float y = opponentNode.getWorldTranslation().getY();
-        float z = opponentNode.getWorldTranslation().getZ();
-
-        float myX = getPlayer().getPlayerNode().getWorldTranslation().getX();
-        float myZ = getPlayer().getPlayerNode().getWorldTranslation().getZ();
-
-        float distX = myX - x;
-        float distZ = myZ - z;
-
-        float doubleDistX = distX * distX;
-        float doubleDistZ = distZ * distZ;
-
-        float dist = (float) Math.sqrt(doubleDistX + doubleDistZ);
-
-        float speed = 4f;
-        float speedRatio = speed / dist;
-
-        Vector3f dirVector = new Vector3f(distX * speedRatio, y, distZ * speedRatio).negate();
-        dirVector = new Vector3f(dirVector.getX(), y, dirVector.getZ());
-
         return null;
     }
 
