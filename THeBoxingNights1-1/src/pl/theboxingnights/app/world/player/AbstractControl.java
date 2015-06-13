@@ -4,6 +4,9 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import pl.theboxingnights.app.other.comparator.Comparator;
+
+import java.util.function.BooleanSupplier;
 
 /**
  * Created by filip / 10.06.15 / 11:03
@@ -120,7 +123,8 @@ public abstract class AbstractControl implements Controls, ActionListener {
     }
 
     private void initBooleanKeys(String name, boolean value, float tpf) {
-        if (compare(name, getLeftKeyName()) == 0) {
+
+        if (Comparator.compare(name, getLeftKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isLeftKey(true);
             } else {
@@ -128,7 +132,7 @@ public abstract class AbstractControl implements Controls, ActionListener {
             }
         }
 
-        if (compare(name, getRightKeyName()) == 0) {
+        if (Comparator.compare(name, getRightKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isRightKey(true);
             } else {
@@ -136,7 +140,7 @@ public abstract class AbstractControl implements Controls, ActionListener {
             }
         }
 
-        if (compare(name, getUpKeyName()) == 0) {
+        if (Comparator.compare(name, getUpKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isUpKey(true);
             } else {
@@ -144,7 +148,7 @@ public abstract class AbstractControl implements Controls, ActionListener {
             }
         }
 
-        if (compare(name, getDownKeyName()) == 0) {
+        if (Comparator.compare(name, getDownKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isDownKey(true);
             } else {
@@ -152,7 +156,7 @@ public abstract class AbstractControl implements Controls, ActionListener {
             }
         }
 
-        if (compare(name, getLeftJabKeyName()) == 0) {
+        if (Comparator.compare(name, getLeftJabKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isLeftJabKey(true);
             } else {
@@ -160,7 +164,7 @@ public abstract class AbstractControl implements Controls, ActionListener {
             }
         }
 
-        if (compare(name, getRightJabKeyName()) == 0) {
+        if (Comparator.compare(name, getRightJabKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isRightJabKey(true);
             } else {
@@ -168,7 +172,7 @@ public abstract class AbstractControl implements Controls, ActionListener {
             }
         }
 
-        if (compare(name, getLeftHookKeyName()) == 0) {
+        if (Comparator.compare(name, getLeftHookKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isLeftHookKey(true);
             } else {
@@ -176,7 +180,7 @@ public abstract class AbstractControl implements Controls, ActionListener {
             }
         }
 
-        if (compare(name, getRightHookKeyName()) == 0) {
+        if (Comparator.compare(name, getRightHookKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isRightHookKey(true);
             } else {
@@ -184,7 +188,7 @@ public abstract class AbstractControl implements Controls, ActionListener {
             }
         }
 
-        if (compare(name, getLeftUppercutKeyName()) == 0) {
+        if (Comparator.compare(name, getLeftUppercutKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isLeftUppercutKey(true);
             } else {
@@ -192,7 +196,7 @@ public abstract class AbstractControl implements Controls, ActionListener {
             }
         }
 
-        if (compare(name, getRightUppercutKeyName()) == 0) {
+        if (Comparator.compare(name, getRightUppercutKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isRightUppercutKey(true);
             } else {
@@ -200,7 +204,7 @@ public abstract class AbstractControl implements Controls, ActionListener {
             }
         }
 
-        if (compare(name, getGuardKeyName()) == 0) {
+        if (Comparator.compare(name, getGuardKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isGuardKey(true);
             } else {
@@ -208,7 +212,7 @@ public abstract class AbstractControl implements Controls, ActionListener {
             }
         }
 
-        if (compare(name, getPositionKeyName()) == 0) {
+        if (Comparator.compare(name, getPositionKeyName(), (x, y) -> x.compareTo(y) == 0)) {
             if (value) {
                 isPositionKey(true);
             } else {

@@ -1,4 +1,4 @@
-package pl.theboxingnights.app.other;
+package pl.theboxingnights.app.other.calculator;
 
 /**
  * Created by filip / 13.06.15 / 17:37

@@ -13,13 +13,14 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import pl.theboxingnights.app.other.*;
+import pl.theboxingnights.app.other.calculator.Calculator;
 import pl.theboxingnights.app.world.player.AbstractControl;
 import pl.theboxingnights.app.world.player.AnimationsNames;
 import pl.theboxingnights.app.world.player.PlayerBuilder;
 import pl.theboxingnights.app.world.player.controls.*;
 
 import java.lang.Math;
+import java.util.function.BooleanSupplier;
 
 /**
  * Created by filip / 08.06.15 / 03:45
@@ -86,6 +87,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private void setKeysActionsAndAnimations() {
         setKeyAction(null);
         setAnimationName(null);
+
         if (getKeyControl().isUpKey()) {
             setKeyAction(new Up(this));
             setAnimationName(AnimationsNames.getStepAnimationName());
@@ -198,7 +200,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     public void lookAt(Vector3f direction) {
         setBodyNode((Node) getPlayerNode().getChild("Body"));
 
-        float xDistance = Calculator.calculate((x,y)->x-y, getPlayerNode().getWorldTranslation().getX(),  getOpponent().getPlayerNode().getWorldTranslation().getX() );
+        float xDistance = Calculator.calculate((x, y) -> x - y, getPlayerNode().getWorldTranslation().getX(), getOpponent().getPlayerNode().getWorldTranslation().getX());
         float zDistance = Calculator.calculate((x, y) -> x-y, getPlayerNode().getWorldTranslation().getZ(),getOpponent().getPlayerNode().getWorldTranslation().getZ() );
         float maxDifference = 6.0f;
         float denominator = 1.8f;

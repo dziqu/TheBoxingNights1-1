@@ -1,7 +1,6 @@
 package pl.theboxingnights.app.start;
 
 import com.jme3.app.SimpleApplication;
-import pl.theboxingnights.app.other.Calculator;
 import pl.theboxingnights.app.settings.Settings;
 import pl.theboxingnights.app.world.MyWorld;
 
