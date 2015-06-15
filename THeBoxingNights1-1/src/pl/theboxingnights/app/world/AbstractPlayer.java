@@ -92,7 +92,28 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         } else if (this instanceof ComputerPlayer) {
             lookAt(getOpponent().getPlayerNode().getWorldTranslation());
             checkCollisions();
+            checkDistance();
         }
+    }
+
+    private void checkDistance() {
+        float myX = getPlayerNode().getWorldTranslation().getX();
+        float myZ = getPlayerNode().getWorldTranslation().getZ();
+        float opponentX = getOpponent().getPlayerNode().getWorldTranslation().getX();
+        float opponentZ = getOpponent().getPlayerNode().getWorldTranslation().getZ();
+
+        float xDistance = Calculator.calculate((x, y) -> x - y, myX, opponentX);
+        float zDistance = Calculator.calculate((x, y) -> x-y, myZ, opponentZ );
+        float distance = (float) Math.sqrt((xDistance*xDistance) + (zDistance*zDistance));
+        Vector3f walkDirectionVector = new Vector3f(0, 0, 0);
+        if (distance > 2.5f) {
+            if (myX < opponentX) walkDirectionVector.set(4, 0, 0);
+            if (myX > opponentX) walkDirectionVector.set(-4, 0, 0);
+            if (myX >= opponentX && myZ < opponentZ) walkDirectionVector.set(0, 0, 4);
+            if (myX < opponentX && myZ >= opponentZ) walkDirectionVector.set(0, 0, -4);
+        }
+
+        getBetterCharacterControl().setWalkDirection(walkDirectionVector);
     }
 
     private void setKeysActionsAndAnimations() {
