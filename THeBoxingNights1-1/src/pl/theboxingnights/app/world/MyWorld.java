@@ -13,6 +13,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
+import pl.theboxingnights.app.world.player.ComputerControl;
 import pl.theboxingnights.app.world.player.FirstControl;
 import pl.theboxingnights.app.world.player.SecondControl;
 
@@ -67,10 +68,10 @@ public class MyWorld extends AbstractAppState {
         getPlayer1().setLocalTranslation(new Vector3f(9, 5, 9));
         getPlayer1().setKeyControl(new FirstControl(this.getApp()));
 
-        setPlayer2(new UserPlayer(this.getApp(), "Zenek" + "Player", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend"));
+        setPlayer2(new ComputerPlayer(this.getApp(), "Zenek" + "Player", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend"));
         getPlayer2().setScale(.4f);
         getPlayer2().setLocalTranslation(new Vector3f(-9, 5, -9));
-        getPlayer2().setKeyControl(new SecondControl(this.getApp()));
+        getPlayer2().setKeyControl(new ComputerControl(this.getApp()));
 
         getPlayer1().setOpponent(getPlayer2());
         getPlayer2().setOpponent(getPlayer1());

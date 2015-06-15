@@ -81,9 +81,18 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     @Override
     public void update (float tpf) {
-        setKeysActionsAndAnimations();
-        lookAt(getOpponent().getPlayerNode().getWorldTranslation());
-        checkCollisions();
+        checkPlayerInstance();
+    }
+
+    private void checkPlayerInstance() {
+        if (this instanceof UserPlayer) {
+            setKeysActionsAndAnimations();
+            lookAt(getOpponent().getPlayerNode().getWorldTranslation());
+            checkCollisions();
+        } else if (this instanceof ComputerPlayer) {
+            lookAt(getOpponent().getPlayerNode().getWorldTranslation());
+            checkCollisions();
+        }
     }
 
     private void setKeysActionsAndAnimations() {
@@ -209,12 +218,13 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         float maxDifference = 6.0f;
         float denominator = 1.8f;
         float difference = Calculator.calculate((x, y)->x+y, xDistance, zDistance);
-        if (Comparator.compare(difference, x -> x < 0)) difference = Calculator.calculate((x,y)->x*y, difference, -1f);
+        if (Comparator.compare(difference, x -> x < 0)) {
+            difference = Calculator.calculate((x,y)->x*y, difference, -1f);
+        }
         difference = (float) Math.sqrt(difference);
-        getBodyNode().lookAt(
-                        new Vector3f(direction.getX(),
-                        Calculator.calculate((x, y) -> x/y, (Calculator.calculate((x,y)->x-y, maxDifference, difference)), denominator),
-                        direction.getZ()), Vector3f.UNIT_Y);
+        getBodyNode().lookAt(   new Vector3f(direction.getX(),
+                                Calculator.calculate((x, y) -> x/y, (Calculator.calculate((x,y)->x-y, maxDifference, difference)), denominator),
+                                direction.getZ()), Vector3f.UNIT_Y);
         getBodyNode().rotate(0, 3.2f, 0);
     }
 
