@@ -11,6 +11,7 @@ import pl.theboxingnights.app.world.AbstractPlayer;
 public class RightJab extends AbstractKeyAction {
     public RightJab(AbstractPlayer player) {
         super(player);
+        setStamina(100f);
     }
 
     @Override

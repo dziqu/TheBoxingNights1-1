@@ -9,6 +9,8 @@ import pl.theboxingnights.app.world.AbstractPlayer;
 public abstract class AbstractKeyAction implements KeyAction {
 
     private AbstractPlayer player = null;
+    private float stamina = 0f;
+    private float maxPower = 2 * getStamina();
 
     public AbstractKeyAction(AbstractPlayer player) {
         this.setPlayer(player);
@@ -32,4 +34,20 @@ public abstract class AbstractKeyAction implements KeyAction {
     }
 
     public abstract Vector3f getWalkDirection();
+
+    public float getStamina() {
+        return stamina;
+    }
+
+    public void setStamina(float stamina) {
+        this.stamina = stamina;
+    }
+
+    public float getMaxPower() {
+        return maxPower;
+    }
+
+    public void setMaxPower(float maxPower) {
+        this.maxPower = maxPower;
+    }
 }

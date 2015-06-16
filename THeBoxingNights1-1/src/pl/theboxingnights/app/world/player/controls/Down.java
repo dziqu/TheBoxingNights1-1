@@ -11,6 +11,7 @@ public class Down extends AbstractKeyAction {
 
     public Down(AbstractPlayer player) {
         super(player);
+        setStamina(10f);
     }
 
     @Override

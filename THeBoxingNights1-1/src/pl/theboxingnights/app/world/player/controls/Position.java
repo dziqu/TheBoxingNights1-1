@@ -12,6 +12,7 @@ public class Position extends AbstractKeyAction {
 
     public Position(AbstractPlayer player) {
         super(player);
+        setStamina(0f);
     }
 
     @Override

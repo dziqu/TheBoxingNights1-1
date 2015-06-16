@@ -10,6 +10,7 @@ import pl.theboxingnights.app.world.AbstractPlayer;
 public class LeftUppercut extends AbstractKeyAction {
     public LeftUppercut(AbstractPlayer player) {
         super(player);
+        setStamina(50f);
     }
 
     @Override

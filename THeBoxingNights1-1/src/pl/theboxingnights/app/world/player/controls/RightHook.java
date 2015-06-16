@@ -10,6 +10,7 @@ import pl.theboxingnights.app.world.AbstractPlayer;
 public class RightHook extends AbstractKeyAction {
     public RightHook(AbstractPlayer player) {
         super(player);
+        setStamina(100f);
     }
 
     @Override
