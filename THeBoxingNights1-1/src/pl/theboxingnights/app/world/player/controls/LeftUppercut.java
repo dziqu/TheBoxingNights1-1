@@ -11,6 +11,7 @@ public class LeftUppercut extends AbstractKeyAction {
     public LeftUppercut(AbstractPlayer player) {
         super(player);
         setStamina(50f);
+        setTacticLevel(2);
     }
 
     @Override

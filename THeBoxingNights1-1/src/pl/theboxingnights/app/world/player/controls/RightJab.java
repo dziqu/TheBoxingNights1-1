@@ -12,6 +12,7 @@ public class RightJab extends AbstractKeyAction {
     public RightJab(AbstractPlayer player) {
         super(player);
         setStamina(100f);
+        setTacticLevel(3);
     }
 
     @Override

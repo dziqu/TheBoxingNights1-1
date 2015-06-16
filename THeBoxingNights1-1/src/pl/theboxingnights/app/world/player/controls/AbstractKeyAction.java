@@ -11,6 +11,7 @@ public abstract class AbstractKeyAction implements KeyAction {
     private AbstractPlayer player = null;
     private float stamina = 0f;
     private float maxPower = 2 * getStamina();
+    private int tacticLevel = 0;
 
     public AbstractKeyAction(AbstractPlayer player) {
         this.setPlayer(player);
@@ -49,5 +50,13 @@ public abstract class AbstractKeyAction implements KeyAction {
 
     public void setMaxPower(float maxPower) {
         this.maxPower = maxPower;
+    }
+
+    public int getTacticLevel() {
+        return tacticLevel;
+    }
+
+    public void setTacticLevel(int tacticLevel) {
+        this.tacticLevel = tacticLevel;
     }
 }

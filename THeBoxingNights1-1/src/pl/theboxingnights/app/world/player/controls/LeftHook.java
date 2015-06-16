@@ -11,6 +11,7 @@ public class LeftHook extends AbstractKeyAction {
     public LeftHook(AbstractPlayer player) {
         super(player);
         setStamina(50f);
+        setTacticLevel(2);
     }
 
     @Override

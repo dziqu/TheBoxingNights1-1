@@ -44,7 +44,8 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private AnimChannel bodyAnimChannel;
     private String animationName = "position";
     private AbstractPlayer opponent;
-    private int points = 0;
+    private float health = 1000f;
+    private float stamina = 500f;
 
     public AbstractPlayer(SimpleApplication app, String name, String location) {
         this.app = app;
@@ -173,8 +174,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         node1.collideWith(node2.getWorldBound(), results);
         if (results.size() > 0) {
             if (getAnimationName().compareTo(AnimationsNames.getLeftJabAnimationName()) == 0) {
-                setPoints(getPoints() + 1);
-                System.out.println(getName() + ": " + getPoints());
+
             }
         }
     }
@@ -332,12 +332,19 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         this.opponent = opponent;
     }
 
-    public int getPoints() {
-        return points;
+    public float getHealth() {
+        return health;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public void setHealth(float health) {
+        this.health = health;
     }
 
+    public float getStamina() {
+        return stamina;
+    }
+
+    public void setStamina(float stamina) {
+        this.stamina = stamina;
+    }
 }

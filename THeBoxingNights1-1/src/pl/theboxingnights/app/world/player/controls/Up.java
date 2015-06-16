@@ -13,6 +13,7 @@ public class Up extends AbstractKeyAction {
     public Up(AbstractPlayer player) {
         super(player);
         setStamina(10f);
+        setTacticLevel(1);
     }
 
     @Override

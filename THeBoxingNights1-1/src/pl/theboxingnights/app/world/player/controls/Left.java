@@ -12,6 +12,7 @@ public class Left extends AbstractKeyAction {
     public Left(AbstractPlayer player) {
         super(player);
         setStamina(10f);
+        setTacticLevel(1);
     }
 
     @Override

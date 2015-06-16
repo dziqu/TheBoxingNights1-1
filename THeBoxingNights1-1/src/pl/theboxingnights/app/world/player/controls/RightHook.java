@@ -11,6 +11,7 @@ public class RightHook extends AbstractKeyAction {
     public RightHook(AbstractPlayer player) {
         super(player);
         setStamina(100f);
+        setTacticLevel(3);
     }
 
     @Override
