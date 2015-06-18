@@ -22,7 +22,7 @@ import pl.theboxingnights.app.world.player.PlayerBuilder;
 import pl.theboxingnights.app.world.player.controls.*;
 
 import java.lang.Math;
-import java.util.function.BooleanSupplier;
+import java.util.Random;
 
 /**
  * Created by filip / 08.06.15 / 03:45
@@ -44,6 +44,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     private AnimChannel bodyAnimChannel;
     private String animationName = "position";
     private AbstractPlayer opponent;
+    private Random rand;
     private float health = 1000f;
     private float stamina = 500f;
 
@@ -54,6 +55,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         assetManager = this.getApp().getAssetManager();
         stateManager = this.getApp().getStateManager();
         rootNode = this.getApp().getRootNode();
+        rand = new Random();
         loadPlayer();
         initAnimInstances();
 
@@ -93,11 +95,13 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         } else if (this instanceof ComputerPlayer) {
             lookAt(getOpponent().getPlayerNode().getWorldTranslation());
             checkCollisions();
-            checkDistance();
+            checkAction();
         }
     }
 
-    private void checkDistance() {
+    private void checkAction() {
+        String computerAnimationName = null;
+
         float myX = getPlayerNode().getWorldTranslation().getX();
         float myZ = getPlayerNode().getWorldTranslation().getZ();
         float opponentX = getOpponent().getPlayerNode().getWorldTranslation().getX();
@@ -106,15 +110,29 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         float xDistance = Calculator.calculate((x, y) -> x - y, myX, opponentX);
         float zDistance = Calculator.calculate((x, y) -> x-y, myZ, opponentZ );
         float distance = (float) Math.sqrt((xDistance*xDistance) + (zDistance*zDistance));
+
         Vector3f walkDirectionVector = new Vector3f(0, 0, 0);
-        if (distance > 2.5f) {
+
+        if (distance > 1.5f) {
             if (myX < opponentX) walkDirectionVector.set(4, 0, 0);
             if (myX > opponentX) walkDirectionVector.set(-4, 0, 0);
             if (myX >= opponentX && myZ < opponentZ) walkDirectionVector.set(0, 0, 4);
             if (myX < opponentX && myZ >= opponentZ) walkDirectionVector.set(0, 0, -4);
+
+            computerAnimationName = AnimationsNames.getPositionAnimationName();
+        } else {
+            int randomNumber = 6 - rand.nextInt(6);
+            if (randomNumber == 1) computerAnimationName = AnimationsNames.getLeftJabAnimationName();
+            else if (randomNumber == 2) computerAnimationName = AnimationsNames.getRightJabAnimationName();
+            else if (randomNumber == 3) computerAnimationName = AnimationsNames.getLeftHookAnimationName();
+            else if (randomNumber == 4) computerAnimationName = AnimationsNames.getRightHookAnimationName();
+            else if (randomNumber == 5) computerAnimationName = AnimationsNames.getLeftUppercutAnimationName();
+            else if (randomNumber == 6) computerAnimationName = AnimationsNames.getRightUppercutAnimationName();
+            else computerAnimationName = AnimationsNames.getPositionAnimationName();
         }
 
         getBetterCharacterControl().setWalkDirection(walkDirectionVector);
+        if (animationName != null) setAnimation(getBodyAnimChannel(), computerAnimationName);
     }
 
     private void setKeysActionsAndAnimations() {
@@ -122,6 +140,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         setAnimationName(null);
 
         SimpleBooleanComparator simpleBooleanComparator = x -> x == true;
+
 
         if (Comparator.compare(getKeyControl().isUpKey(), simpleBooleanComparator)) {
             setKeyAction(new Up(this));
@@ -168,12 +187,20 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
     }
 
     private void checkCollisions() {
-        CollisionResults results = new CollisionResults();
-        Spatial node1 = getPlayerNode().getChild("leftGloveGeo");
-        Spatial node2 = getOpponent().getPlayerNode().getChild("headGeo");
-        node1.collideWith(node2.getWorldBound(), results);
-        if (results.size() > 0) {
+        CollisionResults leftGloveHeadResult = new CollisionResults();
+        CollisionResults rightGloveHeadResult = new CollisionResults();
+
+        Spatial leftGlove = getPlayerNode().getChild("leftGloveGeo");
+        Spatial rightGlove = getPlayerNode().getChild("rightGloveGeo");
+        Spatial head = getOpponent().getPlayerNode().getChild("headGeo");
+
+        leftGlove.collideWith(head.getWorldBound(), leftGloveHeadResult);
+        rightGlove.collideWith(head.getWorldBound(), rightGloveHeadResult);
+
+        if (leftGloveHeadResult.size() > 0) {
             if (getAnimationName().compareTo(AnimationsNames.getLeftJabAnimationName()) == 0) {
+
+            } else {
 
             }
         }
