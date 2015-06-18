@@ -4,9 +4,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import pl.theboxingnights.app.other.comparator.Comparator;
-
-import java.util.function.BooleanSupplier;
+import pl.theboxingnights.app.others.comparator.Comparator;
 
 /**
  * Created by filip / 10.06.15 / 11:03

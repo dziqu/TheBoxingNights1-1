@@ -36,7 +36,7 @@ public final class Settings {
         }
     }
 
-    public void getSettingsFromFile() {
+    public void getAllSettings() {
         fullscreen = settings.isFullscreen();
         depthBits = settings.getDepthBits();
         stencilBits = settings.getStencilBits();

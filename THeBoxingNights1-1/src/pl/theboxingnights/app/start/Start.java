@@ -17,7 +17,7 @@ public class Start extends SimpleApplication {
     private void setSettings() {
         Settings settings = new Settings(this);
         settings.load();
-        settings.getSettingsFromFile();
+        settings.getAllSettings();
         settings.setAllSettings();
         settings.save();
     }
