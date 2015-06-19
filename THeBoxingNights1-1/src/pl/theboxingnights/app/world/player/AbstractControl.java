@@ -56,14 +56,14 @@ public abstract class AbstractControl implements Controls, ActionListener {
     public AbstractControl(SimpleApplication app) {
         this.app = app;
         initClassName();
-        initKeyNames();
+        initKeysNames();
         initKeysValues();
         initMapping();
         initActionListener();
     }
 
     @Override
-    public void initKeyNames() {
+    public void initKeysNames() {
         setLeftKeyName("leftKey" + getClassName());
         setRightKeyName("rightKey" + getClassName());
         setUpKeyName("upKey" + getClassName());

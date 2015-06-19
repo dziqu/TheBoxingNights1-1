@@ -55,7 +55,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         assetManager = this.getApp().getAssetManager();
         stateManager = this.getApp().getStateManager();
         rootNode = this.getApp().getRootNode();
-        rand = new Random();
+        setRand(new Random());
         loadPlayer();
         initAnimInstances();
 
@@ -121,7 +121,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
             computerAnimationName = AnimationsNames.getPositionAnimationName();
         } else {
-            int randomNumber = 6 - rand.nextInt(6);
+            int randomNumber = 6 - getRand().nextInt(6);
             if (randomNumber == 1) computerAnimationName = AnimationsNames.getLeftJabAnimationName();
             else if (randomNumber == 2) computerAnimationName = AnimationsNames.getRightJabAnimationName();
             else if (randomNumber == 3) computerAnimationName = AnimationsNames.getLeftHookAnimationName();
@@ -132,7 +132,7 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
         }
 
         getBetterCharacterControl().setWalkDirection(walkDirectionVector);
-        if (animationName != null) setAnimation(getBodyAnimChannel(), computerAnimationName);
+        if (getAnimationName() != null) setAnimation(getBodyAnimChannel(), computerAnimationName);
     }
 
     private void setKeysActionsAndAnimations() {
@@ -373,5 +373,13 @@ public abstract class AbstractPlayer extends AbstractAppState implements WorldOb
 
     public void setStamina(float stamina) {
         this.stamina = stamina;
+    }
+
+    public Random getRand() {
+        return rand;
+    }
+
+    public void setRand(Random rand) {
+        this.rand = rand;
     }
 }

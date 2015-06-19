@@ -71,11 +71,46 @@ public class MyWorld extends AbstractAppState {
         setPlayer2(new ComputerPlayer(this.getApp(), "Zenek" + "Player", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend"));
         getPlayer2().setScale(.4f);
         getPlayer2().setLocalTranslation(new Vector3f(-9, 5, -9));
-        getPlayer2().setKeyControl(new ComputerControl(this.getApp()));
+        getPlayer2().setKeyControl(new SecondControl(this.getApp()));
 
         getPlayer1().setOpponent(getPlayer2());
         getPlayer2().setOpponent(getPlayer1());
 
+    }
+
+    private void initData() {
+        this.setApp((SimpleApplication) app);
+        this.setStateManager(stateManager);
+        setAssetManager(this.getApp().getAssetManager());
+        setBulletAppState(new BulletAppState());
+        setRootNode(this.getApp().getRootNode());
+
+        setCam(this.getApp().getCamera());
+        getCam().setLocation(new Vector3f(.5043195f, 21.533813f, 18.173557f));
+        getCam().setRotation(new Quaternion().set(6.101522E-4f, 0.90909696f, -0.41658196f, 0.0013310789f));
+
+        setFlyCam(this.getApp().getFlyByCamera());
+        getFlyCam().setEnabled(false);
+
+        setBulletAppState(new BulletAppState());
+        stateManager.attach(getBulletAppState());
+        getBulletAppState().setDebugEnabled(true);
+        getAssetManager().registerLoader(BlenderModelLoader.class, "blend");
+
+        setScene(new Scene(this.getApp(), "ring" + "Scene", "pl/theboxingnights/app/assets/models/scene/ring/ring.blend"));
+
+        setPlayer1(new UserPlayer(this.getApp(), "Antek" + "Player", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend"));
+        getPlayer1().setScale(.4f);
+        getPlayer1().setLocalTranslation(new Vector3f(9, 5, 9));
+        getPlayer1().setKeyControl(new FirstControl(this.getApp()));
+
+        setPlayer2(new ComputerPlayer(this.getApp(), "Zenek" + "Player", "pl/theboxingnights/app/assets/models/player/greenPlayerArmature+Body+GhostControlCubes.blend"));
+        getPlayer2().setScale(.4f);
+        getPlayer2().setLocalTranslation(new Vector3f(-9, 5, -9));
+        getPlayer2().setKeyControl(new SecondControl(this.getApp()));
+
+        getPlayer1().setOpponent(getPlayer2());
+        getPlayer2().setOpponent(getPlayer1());
     }
 
     @Override

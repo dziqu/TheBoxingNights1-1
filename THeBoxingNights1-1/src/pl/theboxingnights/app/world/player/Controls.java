@@ -13,5 +13,5 @@ public interface Controls {
 
     void initClassName();
 
-    void initKeyNames();
+    void initKeysNames();
 }
